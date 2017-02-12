@@ -1,0 +1,7 @@
+- name: deploy single
+  hosts: all
+  roles:
+    - base
+    - docker
+    - backup-to-s3
+    - log-to-loggly

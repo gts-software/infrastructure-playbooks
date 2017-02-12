@@ -1,0 +1,6 @@
+- name: 'install essentials'
+  apt: name='{{item}}' state=latest
+  with_items:
+    - screen
+    - nano
+    - elvis-tiny

@@ -1,0 +1,4 @@
+- include: install-essentials.yml
+- include: upgrade-system.yml
+- include: configure-names.yml
+- meta: flush_handlers
