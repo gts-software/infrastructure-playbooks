@@ -1,0 +1,12 @@
+- name: 'install : docker service and pip'
+  apt: name='{{item}}' state=latest
+  with_items:
+    - docker-engine
+    - python-pip
+    - python-virtualenv
+
+- name: 'install : compose'
+  pip: name='{{item}}' state=latest
+  with_items:
+    - pip
+    - docker-compose

@@ -1,6 +1,8 @@
 - name: 'install essentials'
   apt: name='{{item}}' state=latest
   with_items:
+    - apt-transport-https
+    - ca-certificates
     - screen
     - nano
     - elvis-tiny
