@@ -2,7 +2,8 @@
   docker_container:
     name: log-to-loggly
     image: iamatypeofwalrus/logspout-loggly:latest
-    pull: true
+    # TODO: we want true here, but this results in 'changed' status even if nothing changed
+    pull: false
     restart_policy: 'on-failure'
     restart_retries: 5
     state: started
