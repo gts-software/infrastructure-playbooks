@@ -13,6 +13,10 @@
     state: started
     env:
       BACKUP_INTERVAL: '{{ backup_interval }}'
+      BACKUP_FULL_EVERY: '{{ backup_full_every }}'
+      BACKUP_REMOVE_OLDER_THAN: '{{ backup_remove_older_than }}'
+      AWS_ACCESS_KEY_ID: '{{ backup_target_aws_key }}'
+      AWS_SECRET_ACCESS_KEY: '{{ backup_target_aws_secret_key }}'
     volumes:
       - '/:/host:ro'
       - '{{ base_data_dir }}/core_backup/backups/:/backups'

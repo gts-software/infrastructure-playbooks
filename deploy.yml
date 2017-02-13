@@ -4,5 +4,5 @@
     - base
     - docker
     - logging
-    #- backup
+    - backup
     - gate
