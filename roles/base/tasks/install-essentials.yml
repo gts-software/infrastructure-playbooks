@@ -7,3 +7,5 @@
     - nano
     - elvis-tiny
     - mc
+    - curl
+    - jq

@@ -3,5 +3,5 @@
   roles:
     - base
     - docker
-    - backup-to-s3
     - log-to-loggly
+    - backup-to-s3
