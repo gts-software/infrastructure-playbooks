@@ -1,6 +1,6 @@
-- name: 'log to loggly : setup logging container'
+- name: 'logging : container'
   docker_container:
-    name: log-to-loggly
+    name: core_logging
     image: iamatypeofwalrus/logspout-loggly:latest
     # TODO: we want true here, but this results in 'changed' status even if nothing changed
     pull: false
@@ -8,8 +8,8 @@
     restart_retries: 5
     state: started
     env:
-      LOGGLY_TOKEN: '{{ loggly_token }}'
+      LOGGLY_TOKEN: '{{ logging_token }}'
       LOGGLY_TAGS: '{{ base_name_host }}.{{ base_name_domain }}'
       FILTER_NAME: '*'
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'

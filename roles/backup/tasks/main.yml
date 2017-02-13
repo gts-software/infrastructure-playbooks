@@ -1,0 +1,19 @@
+- name: 'backup : network'
+  docker_network:
+    name: core_backup
+
+- name: 'backup : container'
+  docker_container:
+    name: core_backup
+    image: quay.io/process_team/docker_backup:latest
+    # TODO: we want true here, but this results in 'changed' status even if nothing changed
+    pull: false
+    restart_policy: 'on-failure'
+    restart_retries: 5
+    state: started
+    env:
+      BACKUP_INTERVAL: '{{ backup_interval }}'
+    volumes:
+      - '/:/host:ro'
+      - '{{ base_data_dir }}/core_backup/backups/:/backups'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'

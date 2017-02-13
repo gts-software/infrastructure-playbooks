@@ -1,0 +1,33 @@
+- name: 'gate : network'
+  docker_network:
+    name: core_gate
+
+- name: 'gate : container'
+  docker_container:
+    name: core_gate
+    image: traefik:latest
+    # TODO: we want true here, but this results in 'changed' status even if nothing changed
+    pull: false
+    restart_policy: 'on-failure'
+    restart_retries: 5
+    state: started
+    command: >
+      --acme=true
+      --acme.onhostrule=true
+      --acme.email={{ base_devops_email }}
+      --acme.storage=/certs/acme.json
+      --acme.entrypoint=https
+      --entrypoints='Name:https Address::443 TLS'
+      --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
+      --defaultentrypoints=https,http
+      --docker=true
+      --docker.exposedbydefault=false
+      --docker.watch=true
+      --web=true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '{{ base_data_dir }}/core_gate/certs/:/certs'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '127.0.0.1:8080:8080'
