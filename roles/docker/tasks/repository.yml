@@ -4,11 +4,8 @@
     keyserver: hkp://p80.pool.sks-keyservers.net:80
     id: 58118E89F3A912897C070ADBF76221572C52609D
 
-- name: 'repository : add repository'
+- name: 'repository : add repository and update cache'
   become: yes
   apt_repository:
     repo: deb https://apt.dockerproject.org/repo ubuntu-xenial main
-
-- name: 'repository : update cache'
-  apt:
     update_cache: yes
