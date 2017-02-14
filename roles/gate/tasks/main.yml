@@ -17,8 +17,8 @@
       --acme.email={{ base_devops_email }}
       --acme.storage=/certs/acme.json
       --acme.entrypoint=https
+      --entrypoints='Name:http Address::80'
       --entrypoints='Name:https Address::443 TLS'
-      --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
       --defaultentrypoints=https,http
       --docker=true
       --docker.exposedbydefault=false
@@ -30,4 +30,7 @@
     ports:
       - '80:80'
       - '443:443'
-      - '127.0.0.1:8080:8080'
+      - '8080:8080'
+      #- '127.0.0.1:8080:8080'
+
+# --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
