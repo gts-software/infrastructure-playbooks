@@ -13,3 +13,6 @@
       FILTER_NAME: '*'
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    networks:
+      - name: bridge
+    purge_networks: true

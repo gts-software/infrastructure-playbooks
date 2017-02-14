@@ -32,5 +32,9 @@
       - '443:443'
       - '8080:8080'
       #- '127.0.0.1:8080:8080'
+    networks:
+      - name: bridge
+      - name: core_gate
+    purge_networks: true
 
 # --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'

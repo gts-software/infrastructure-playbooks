@@ -21,6 +21,10 @@
       - '/:/host:ro'
       - '{{ base_data_dir }}/core_backup/backups/:/backups'
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - name: bridge
+      - name: core_backup
+    purge_networks: true
 
 - name: 'backup : example1'
   docker_container:
@@ -35,6 +39,9 @@
       backup: "{ type: mongodb, port: 27017 }"
     volumes:
       - '{{ base_data_dir }}/example1/db/:/data/db'
+    networks:
+      - name: core_backup
+    purge_networks: true
 
 - name: 'backup : example2'
   docker_container:
@@ -53,3 +60,6 @@
       backup: "{ type: mount, volume: '/www' }"
     volumes:
       - '{{ base_data_dir }}/example2/webroot/:/www'
+    networks:
+      - name: core_gate
+    purge_networks: true
