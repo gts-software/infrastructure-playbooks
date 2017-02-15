@@ -1,6 +1,7 @@
 - name: 'install essentials'
   apt: name='{{item}}' state=latest
   with_items:
+    - sysfsutils
     - apt-transport-https
     - ca-certificates
     - screen

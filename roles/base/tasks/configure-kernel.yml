@@ -1,0 +1,6 @@
+- name: 'configure kernel : tweaks for mongodb'
+  blockinfile:
+    dest: /etc/sysfs.conf
+    block: |
+      kernel/mm/transparent_hugepage/enabled = never
+  notify: reboot system
