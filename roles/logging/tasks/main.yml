@@ -2,8 +2,7 @@
   docker_container:
     name: core_logging
     image: iamatypeofwalrus/logspout-loggly:latest
-    # TODO: we want true here, but this results in 'changed' status even if nothing changed
-    pull: false
+    pull: '{{ docker_pull | default(false) | bool }}'
     restart_policy: 'on-failure'
     restart_retries: 5
     state: started
