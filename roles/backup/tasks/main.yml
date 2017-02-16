@@ -37,7 +37,7 @@
     restart_retries: 5
     state: started
     labels:
-      backup: "{ type: mongodb, port: 27017 }"
+      backup: "{ id: db, type: mongodb, port: 27017 }"
     volumes:
       - '{{ base_data_dir }}/example1/db/:/data/db'
     networks:
@@ -57,7 +57,7 @@
       traefik.backend: example2
       traefik.frontend.rule: Host:example2.local
       traefik.port: "80"
-      backup: "{ type: mount, volume: '/www' }"
+      backup: "{ id: webroot, type: mount, volume: '/www' }"
     volumes:
       - '{{ base_data_dir }}/example2/webroot/:/www'
     networks:
