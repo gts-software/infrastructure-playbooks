@@ -82,6 +82,10 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | backup_storage_key_id | Amazon AWS access key id | `7M1VGFL6...` |
 | backup_storage_secret_key | Amazon AWS secret access key | `HvbMb9v8dW...` |
 
+Please have a look at the following projects for further information and instructions:
+- [docker-backup](https://github.com/core-process/docker-backup): This service provides backup mechanisms for Docker containers. Container labels provide all container related backup configuration.
+- [logspout-loggly](https://github.com/iamatypeofwalrus/logspout-loggly): This is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to Loggly.
+
 ## Manage a Cluster
 
 TODO
