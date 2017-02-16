@@ -52,10 +52,9 @@ Run the `deploy-server.yml` playbook to setup Docker, logging and backup:
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-server.yml -e docker_pull=true
 
-# nice to know:
-# - the 'docker_pull' variable ensures a pull of the docker images
-# - in case you do not want to update docker images to the newest
-#   version, discard the variable and call:
+# The 'docker_pull' variable ensures a pull of the docker images. In case
+# you do not want to update docker images to the newest version on every run,
+# discard the variable and call:
 ansible-playbook ../infrastructure-playbooks/deploy-server.yml
 ```
 
