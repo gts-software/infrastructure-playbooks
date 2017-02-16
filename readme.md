@@ -113,16 +113,25 @@ project_domains:
   production: mega-community.com
 
 project_definition:
-  version: '2'
   services:
     web:
       image: 'dockercloud/hello-world:latest'
+      depends_on:
+        - db
       volumes:
         - '/web/:/www'
+      publish:
+        port: 80
+        domain: @
+        redirect: { https: true, primary: true }
     db:
       image: 'mongo:latest'
       volumes:
         - '/db/:/data/db'
+      backup:
+        id: db
+        type: mongodb
+        port: 27017
 
 deployment_scale:
   web: 1
