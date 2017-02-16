@@ -28,6 +28,11 @@
       - name: core_backup
     purge_networks: true
 
+- name: 'backup : backup labels'
+  set_fact:
+    example1_backup_label: { id: db, type: mongodb, port: 27017 }
+    example2_backup_label: { id: webroot, type: mount, volume: '/www' }
+
 - name: 'backup : example1'
   docker_container:
     name: example1
@@ -37,7 +42,7 @@
     restart_retries: 5
     state: started
     labels:
-      backup: "{ id: db, type: mongodb, port: 27017 }"
+      backup: '{{ example1_backup_label | to_yaml }}'
     volumes:
       - '{{ base_data_dir }}/example1/db/:/data/db'
     networks:
@@ -57,7 +62,7 @@
       traefik.backend: example2
       traefik.frontend.rule: Host:example2.local
       traefik.port: "80"
-      backup: "{ id: webroot, type: mount, volume: '/www' }"
+      backup: '{{ example2_backup_label | to_yaml }}'
     volumes:
       - '{{ base_data_dir }}/example2/webroot/:/www'
     networks:
