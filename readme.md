@@ -60,7 +60,7 @@ ansible-playbook ../infrastructure-playbooks/deploy-server.yml
 
 Configure the `deploy-server.yml` playbook with the following variables:
 
-| Name | Description | Values |
+| Name | Description | Example |
 | :--- | :--- |  :--- |
 | **Ansible** | | |
 | ansible_host | The IP or DNS of the host to connect to  | `alpha.example.com` |
@@ -75,9 +75,9 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
 | backup_interval | A cron string describing the backup interval | `'0 3 * * *` |
-| backup_full_every | Perform a full backup if the latest full backup is older than the given time (time format according to Duplicity) | `1M` |
-| backup_remove_older_than | Delete all backups older than the given time (time format according to Duplicity) | `1Y` |
-| backup_storage_url | Duplicity target url | `s3://s3-<region>.amazonaws.com/<bucket>/` |
+| backup_full_every | Perform a full backup if the latest full backup is older than the given time | `1M` |
+| backup_remove_older_than | Delete all backups older than the given time | `1Y` |
+| backup_storage_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
 | backup_storage_password | A password for accessing the storage | `2r93ur...` |
 | backup_storage_key_id | Amazon AWS access key id | `7M1VGFL6...` |
 | backup_storage_secret_key | Amazon AWS secret access key | `HvbMb9v8dW...` |
