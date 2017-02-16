@@ -88,8 +88,43 @@ Please have a look at the following projects for further information and instruc
 
 ## Manage a Cluster
 
-TODO
+Coming soon...
 
 ## Manage a Project
 
-TODO
+Run the following command to deploy a project:
+
+```sh
+ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
+  -e target=server.example.com \
+  -e deployment_mode=staging \
+  -e deployment_branch=develop \
+  -e '@project.yml'
+```
+
+Define your project as follows:
+
+```yml
+project_customer: mega
+project_name: community
+
+project_domains:
+  staging: ${branch}.staging.mega-community.com
+  production: mega-community.com
+
+project_definition:
+  version: '2'
+  services:
+    web:
+      image: 'dockercloud/hello-world:latest'
+      volumes:
+        - '/web/:/www'
+    db:
+      image: 'mongo:latest'
+      volumes:
+        - '/db/:/data/db'
+
+deployment_scale:
+  web: 1
+  db: 1
+```

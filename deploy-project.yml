@@ -2,7 +2,7 @@
   hosts: '{{ target }}'
   tasks:
   - docker_service:
-      project_name: '{{ project_name | generate_project_name(deployment_mode, deployment_branch) }}'
-      definition: '{{ project_definition | finalize_project_definition(project_domains) }}'
+      project_name: '{{ project_name | generate_project_name(project_customer, deployment_mode, deployment_branch) }}'
+      definition: '{{ project_definition | finalize_project_definition(project_customer, project_name, project_domains, project_definition, deployment_mode, deployment_branch, deployment_scale) }}'
       pull: '{{ docker_pull | default(false) | bool }}'
       scale: '{{ deployment_scale }}'
