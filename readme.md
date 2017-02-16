@@ -26,16 +26,16 @@ mkdir workspace && cd workspace
 git clone https://github.com/core-process/infrastructure-playbooks.git
 ```
 
-## Setup and Manage the Inventory
+## Manage the Inventory
 
-Initialize your inventory.
+Initialize your inventory:
 
 ```sh
 mkdir infrastructure-inventory && cd infrastructure-inventory
 ../infrastructure-playbooks/inventory-init.sh
 ```
 
-Adjust and/or remove the example hosts of the newly generated inventory. Setup new hosts either manually or by utilizing the [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation) project.
+Adjust or remove the example hosts of the newly generated inventory. Setup new hosts either manually or by utilizing the [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation) project.
 
 Add hosts to the inventory with the help of the `inventory-add.sh` script:
 
@@ -46,9 +46,9 @@ Add hosts to the inventory with the help of the `inventory-add.sh` script:
 ../infrastructure-playbooks/inventory-add.sh gamma gamma.example.com root-password auto
 ```
 
-## Setup and Manage a Server
+## Manage a Server
 
-Run the `deploy-server.yml` playbook to setup Docker, logging and backup.
+Run the `deploy-server.yml` playbook to setup Docker, logging and backup:
 
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-server.yml -e docker_pull=true
@@ -60,6 +60,6 @@ ansible-playbook ../infrastructure-playbooks/deploy-server.yml -e docker_pull=tr
 ansible-playbook ../infrastructure-playbooks/deploy-server.yml
 ```
 
-## Setup and Manage a Cluster
+## Manage a Cluster
 
 TODO
