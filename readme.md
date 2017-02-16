@@ -62,18 +62,18 @@ Configure the `deploy-server.yml` playbook with the following variables:
 
 | Name | Description | Values |
 | :--- | :--- |  :--- |
-| **`ansible_*`** | **Controls how ansible interacts with remote hosts** | |
+| **Ansible** | | |
 | `ansible_host` | The IP or DNS of the host to connect to  | `alpha.example.com` |
 | `ansible_user` | The default ssh user name to use | `root` |
 | `ansible_password` | The ssh password to use | `q9ShgTbqn...` |
-| **`base_*`** | **Fundamentals** | |
+| **Base** | | |
 | `base_name_host` | Hostname to be applied | `alpha` |
 | `base_name_domain` | Domainname to be applied | `example.com` |
 | `base_data_dir` | The base data directory for all containers | `/data` |
 | `base_devops_email` | Email address of the DevOps team | `devops@example.com` |
-| **`logging_*`** | **Logging**  | |
+| **Logging** | | |
 | `logging_token` | Loggly customer token  | `a6b1ba3...` |
-| **`backup_*`** | **Backup**  | |
+| **Backup** | | |
 | `backup_interval` | A cron string describing the backup interval | `'0 3 * * *` |
 | `backup_full_every` | Perform a full backup if the latest full backup is older than the given time (time format according to Duplicity) | `1M` |
 | `backup_remove_older_than` | Delete all backups older than the given time (time format according to Duplicity) | `1Y` |
