@@ -10,6 +10,8 @@
     restart_policy: 'on-failure'
     restart_retries: 5
     state: started
+    # alternative entry point definition for http: redirect to https
+    # --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
     command: >
       --acme=true
       --acme.onhostrule=true
@@ -29,11 +31,8 @@
     ports:
       - '80:80'
       - '443:443'
-      - '8080:8080'
-      #- '127.0.0.1:8080:8080'
+      - '127.0.0.1:8080:8080'
     networks:
       - name: bridge
       - name: core_gate
     purge_networks: true
-
-# --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
