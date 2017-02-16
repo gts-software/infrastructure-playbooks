@@ -1,5 +1,8 @@
-- name: deploy project
+- name: 'deploy project'
   hosts: '{{ target }}'
   tasks:
-  - fail:
-      msg: "Not implemented!"
+  - docker_service:
+      project_name: '{{ project_name | generate_project_name(deployment_mode, deployment_branch) }}'
+      definition: '{{ project_definition | finalize_project_definition(project_domains) }}'
+      pull: '{{ docker_pull | default(false) | bool }}'
+      scale: '{{ deployment_scale }}'
