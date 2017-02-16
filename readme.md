@@ -7,49 +7,59 @@ Please have a look at the following sister projects too:
 - [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation)
 - [docker-backup](https://github.com/core-process/docker-backup)
 
-## Manage the Inventory
+## Setup
+
+Install Ansible and a few helper tools first:
 
 ```sh
-# prepare:
-# - install ansible and helper tools required for the infrastructure scripts
-# - see http://docs.ansible.com/ansible/intro_installation.html
+# see http://docs.ansible.com/ansible/intro_installation.html
 sudo apt-get install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible
 sudo apt-get update
 sudo apt-get install git curl unzip openssh-client sshpass ansible
+```
 
-# clone the latest infrastructure playbooks:
+Clone the latest playbooks:
+
+```sh
 mkdir workspace && cd workspace
 git clone https://github.com/core-process/infrastructure-playbooks.git
+```
 
-# initialize your inventory:
+## Setup and Manage the Inventory
+
+Initialize your inventory.
+
+```sh
 mkdir infrastructure-inventory && cd infrastructure-inventory
 ../infrastructure-playbooks/inventory-init.sh
+```
 
-# now it is your turn:
-# - setup new target machines if required
-# - adjust and/or remove example hosts of the newly generated inventory
+Adjust and/or remove the example hosts of the newly generated inventory. Setup new hosts either manually or by utilizing the [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation) project.
 
-# nice to know:
-# - you can use the 'linux-unattended-installation' project to setup new
-#   hosts easily (see link above)
-# - you can use the '../infrastructure-playbooks/inventory-add.sh' script
-#   to add new hosts to the inventory easily
+Add hosts to the inventory with the help of the `inventory-add.sh` script:
 
-# once you are done, just call:
-ansible-playbook ../infrastructure-playbooks/deploy.yml -e docker_pull=true
+```sh
+# Usage: inventory-add.sh <host name> <host ip or dns> <current root password> [<new root password>|auto]
+# - If you provide a new root password, we will change the password on the host automatically.
+# - If you provide the keyword 'auto', we will generate a strong password automatically.
+../infrastructure-playbooks/inventory-add.sh gamma gamma.example.com root-password auto
+```
+
+## Setup and Manage a Server
+
+Run the `deploy-server.yml` playbook to setup Docker, logging and backup.
+
+```sh
+ansible-playbook ../infrastructure-playbooks/deploy-server.yml -e docker_pull=true
 
 # nice to know:
 # - the 'docker_pull' variable ensures a pull of the docker images
 # - in case you do not want to update docker images to the newest
 #   version, discard the variable and call:
-ansible-playbook ../infrastructure-playbooks/deploy.yml
+ansible-playbook ../infrastructure-playbooks/deploy-server.yml
 ```
 
-## Manage a Server
-
-TODO
-
-## Manage a Cluster
+## Setup and Manage a Cluster
 
 TODO
