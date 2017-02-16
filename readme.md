@@ -1,6 +1,6 @@
 # Infrastructure Playbooks
 
-This project provides a set of Ansible playbooks for a Docker-centric world. Use them to setup single servers, full cluster and projects on top of it. It supports logging and backup out of the box.
+This project provides a set of Ansible playbooks for a Docker-centric world. Use them to set up single servers, entire clusters, and projects on top of it. It supports logging and backup out of the box.
 
 Please have a look at the following sister projects too:
 - [infrastructure-inventory-example](https://github.com/core-process/infrastructure-inventory-example)
