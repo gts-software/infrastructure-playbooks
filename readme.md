@@ -65,7 +65,7 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | `ansible_*` | Controls how ansible interacts with remote hosts | |
 | `ansible_host` | The IP or DNS of the host to connect to  | `alpha.example.com` |
 | `ansible_user` | The default ssh user name to use | `root` |
-| `ansible_password` | The ssh password to use | `q9ShgTbqnr37z56qQm7zbDk7FL0UCp9eaWr2DzZ1bxEgOp7bhpuZ3NHpBLgpQ4Fc` |
+| `ansible_password` | The ssh password to use | `q9ShgTbqn...` |
 | `base_*` | Fundamental settings | |
 | `base_name_host` | Hostname to be applied | `alpha` |
 | `base_name_domain` | Domainname to be applied | `base_name_domain` |
