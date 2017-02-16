@@ -89,3 +89,7 @@ Please have a look at the following projects for further information and instruc
 ## Manage a Cluster
 
 TODO
+
+## Manage a Project
+
+TODO
