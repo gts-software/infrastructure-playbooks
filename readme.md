@@ -74,7 +74,7 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
-| backup_interval | A cron string describing the backup interval | `'0 3 * * *` |
+| backup_interval | A cron string describing the backup interval | `0 3 * * *` |
 | backup_full_every | Perform a full backup if the latest full backup is older than the given time | `1M` |
 | backup_remove_older_than | Delete all backups older than the given time | `1Y` |
 | backup_storage_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
