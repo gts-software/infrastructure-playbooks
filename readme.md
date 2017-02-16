@@ -63,8 +63,8 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | Name | Description | Values |
 | :--- | :--- |  :--- |
 | **Ansible** | | |
-| `ansible_host` | The IP or DNS of the host to connect to  | `alpha.example.com` |
-| `ansible_user` | The default ssh user name to use | `root` |
+| - `ansible_host` | The IP or DNS of the host to connect to  | `alpha.example.com` |
+| * `ansible_user` | The default ssh user name to use | `root` |
 | `ansible_password` | The ssh password to use | `q9ShgTbqn...` |
 | **Base** | | |
 | `base_name_host` | Hostname to be applied | `alpha` |
