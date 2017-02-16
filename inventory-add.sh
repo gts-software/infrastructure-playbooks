@@ -8,14 +8,14 @@ HOST_IP_DNS="$2"
 ROOT_PASSWORD_CURRENT="$3"
 ROOT_PASSWORD_NEW="$4"
 
-if [ -z "$ROOT_PASSWORD_NEW" ]
-then
-  ROOT_PASSWORD_NEW="$ROOT_PASSWORD_CURRENT"
-fi
-
 if [ "$ROOT_PASSWORD_NEW" == "auto" ]
 then
   ROOT_PASSWORD_NEW="`< /dev/urandom tr -dc A-Za-z0-9 | head -c64; echo`"
+fi
+
+if [ -z "$ROOT_PASSWORD_NEW" ]
+then
+  ROOT_PASSWORD_NEW="$ROOT_PASSWORD_CURRENT"
 fi
 
 INVENTORY_DIRECTORY="`pwd`"
