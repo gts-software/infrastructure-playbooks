@@ -62,15 +62,15 @@ Configure the `deploy-server.yml` playbook with the following variables:
 
 | Name | Description | Values |
 | :--- | :--- |  :--- |
-| `ansible_*` | Controls how ansible interacts with remote hosts | |
+| **`ansible_*`** | **Controls how ansible interacts with remote hosts** | |
 | `ansible_host` | The IP or DNS of the host to connect to  | `alpha.example.com` |
 | `ansible_user` | The default ssh user name to use | `root` |
 | `ansible_password` | The ssh password to use | `q9ShgTbqn...` |
-| `base_*` | Fundamental settings | |
+| **`base_*`** | **Fundamental settings** | |
 | `base_name_host` | Hostname to be applied | `alpha` |
-| `base_name_domain` | Domainname to be applied | `base_name_domain` |
-| `base_data_dir` | The base data directory for all containers | `base_data_dir` |
-| `base_devops_email` | Email address of the DevOps team | `base_devops_email` |
+| `base_name_domain` | Domainname to be applied | `example.com` |
+| `base_data_dir` | The base data directory for all containers | `/data` |
+| `base_devops_email` | Email address of the DevOps team | `devops@example.com` |
 | `` |  | `` | `` |
 | `` |  | `` | `` |
 | `` |  | `` | `` |
