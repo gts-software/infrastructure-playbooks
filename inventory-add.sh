@@ -92,6 +92,9 @@ echo "  - added host_vars/$HOST_NAME.yml file"
 
 # update password on host
 
-echo "* updating password on host:"
-echo "root:$ROOT_PASSWORD_NEW" | sshpass -p "$ROOT_PASSWORD_CURRENT" ssh "root@$HOST_IP_DNS" chpasswd
-echo "DONE!"
+if [ "$ROOT_PASSWORD_CURRENT" != "$ROOT_PASSWORD_NEW" ]
+then
+  echo "* updating password on host:"
+  echo "root:$ROOT_PASSWORD_NEW" | sshpass -p "$ROOT_PASSWORD_CURRENT" ssh "root@$HOST_IP_DNS" chpasswd
+  echo "DONE!"
+fi
