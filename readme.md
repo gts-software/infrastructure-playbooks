@@ -12,7 +12,6 @@ Please have a look at the following sister projects too:
 Install Ansible and a few helper tools first:
 
 ```sh
-# see http://docs.ansible.com/ansible/intro_installation.html
 sudo apt-get install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible
 sudo apt-get update
