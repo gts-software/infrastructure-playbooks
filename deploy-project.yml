@@ -1,1 +1,5 @@
-# to be implemented
+- name: deploy project
+  hosts: '{{ target }}'
+  tasks:
+  - fail:
+      msg: "Not implemented!"

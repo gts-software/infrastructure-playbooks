@@ -1,0 +1,5 @@
+- name: deploy cluster
+  hosts: cluster
+  tasks:
+  - fail:
+      msg: "Not implemented!"

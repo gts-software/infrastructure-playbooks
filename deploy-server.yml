@@ -1,4 +1,4 @@
-- name: deploy single
+- name: deploy server
   hosts: all
   roles:
     - base
