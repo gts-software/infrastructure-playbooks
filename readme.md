@@ -97,43 +97,44 @@ Run the following command to deploy a project:
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
   -e target=server.example.com \
-  -e deployment_mode=staging \
-  -e deployment_branch=develop \
+  -e project_mode=staging \
+  -e project_branch=develop \
+  -e project_version=test \
   -e '@project.yml'
 ```
 
 Define your project as follows:
 
 ```yml
-project_customer: mega
+project_group: mega
 project_name: community
 
 project_domains:
-  staging: ${branch}.staging.mega-community.com
+  staging: staging.mega-community.com
   production: mega-community.com
 
-project_definition:
-  services:
-    web:
-      image: 'dockercloud/hello-world:latest'
-      depends_on:
-        - db
-      volumes:
-        - '/web/:/www'
-      publish:
-        port: 80
-        domain: @
-        redirect: { https: true, primary: true }
-    db:
-      image: 'mongo:latest'
-      volumes:
-        - '/db/:/data/db'
-      backup:
-        id: db
-        type: mongodb
-        port: 27017
+project_services:
+  web:
+    image: 'dockercloud/hello-world:latest'
+    depends_on:
+      - db
+    volumes:
+      - '/web/:/www'
+  db:
+    image: 'mongo:latest'
+    volumes:
+      - '/db/:/data/db'
 
-deployment_scale:
-  web: 1
-  db: 1
+project_expose:
+  web:
+    port: 80
+    domains:
+      - '@'
+      - www
+
+project_backup:
+  db:
+    dbdata:
+      type: mongodb
+      port: 27017
 ```

@@ -1,8 +1,33 @@
 - name: 'deploy project'
   hosts: '{{ target }}'
   tasks:
-  - docker_service:
-      project_name: '{{ project_name | generate_project_name(project_customer, deployment_mode, deployment_branch) }}'
-      definition: '{{ project_definition | finalize_project_definition(project_customer, project_name, project_domains, project_definition, deployment_mode, deployment_branch, deployment_scale) }}'
-      pull: '{{ docker_pull | default(false) | bool }}'
-      scale: '{{ deployment_scale }}'
+  - name: 'specification'
+    set_fact:
+      project:
+        mode:     '{{ project_mode }}'
+        branch:   '{{ project_branch }}'
+        version:  '{{ project_version }}'
+        group:    '{{ project_group }}'
+        name:     '{{ project_name }}'
+        domains:  '{{ project_domains }}'
+        services: '{{ project_services }}'
+        expose:   '{{ project_expose }}'
+        backup:   '{{ project_backup }}'
+  - name: 'network'
+    docker_network:
+      name: '{{ project | project_get_network }}'
+  - name: 'container'
+    docker_container:
+      name:     '{{ project | project_get_service_name(service) }}'
+      image:    '{{ project | project_get_service_image(service) }}'
+      pull:     '{{ docker_pull | default(false) | bool }}'
+      labels:   '{{ project | project_get_service_labels(service) }}'
+      volumes:  '{{ project | project_get_service_volumes(service, base_data_dir) }}'
+      networks: '{{ project | project_get_service_networks(service) }}'
+      purge_networks: true
+      restart_policy: 'on-failure'
+      restart_retries: 5
+    with_items: '{{ project | project_get_services }}'
+    loop_control:
+      loop_var: service
+      pause: 5
