@@ -46,7 +46,10 @@ def project_get_service_name(project, service):
     return '{0}_{1}_{2}_{3}_{4}'.format(project['group'], project['name'], project['mode'], project['branch'], service)
 
 def project_get_service_image(project, service):
-    return project['services'][service]['image']
+    image = project['services'][service]['image'].split(':', 1)
+    if len(image) == 1:
+        image.append(project['version'])
+    return ':'.join(image);
 
 def project_get_service_labels(project, service):
     result = {
