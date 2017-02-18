@@ -14,7 +14,7 @@
       CONFIG_INTERVAL: '{{ backup_interval }}'
       CONFIG_FULL_EVERY: '{{ backup_full_every }}'
       CONFIG_REMOVE_OLDER_THAN: '{{ backup_remove_older_than }}'
-      CONFIG_STORAGE_URL: '{{ backup_storage_url }}'
+      CONFIG_STORAGE_URL: '{{ backup_storage_url }}/{{ base_name_host }}'
       CONFIG_STORAGE_PASSWORD: '{{ backup_storage_password | default("") }}'
       CONFIG_STORAGE_KEY_ID: '{{ backup_storage_key_id | default("") }}'
       CONFIG_STORAGE_SECRET_KEY: '{{ backup_storage_secret_key | default("") }}'
