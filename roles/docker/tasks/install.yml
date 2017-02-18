@@ -11,12 +11,12 @@
     - pip
     - docker-py
 
-- name: 'install : compose'
-  get_url:
-    url: 'https://github.com/docker/compose/releases/download/1.11.1/docker-compose-Linux-x86_64'
-    dest: /usr/local/bin/docker-compose
-    mode: 0755
-    # TODO: One could use the GitHub API to determine and download the lastest version:
-    # curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r ".id"
-    # curl -s https://api.github.com/repos/docker/compose/releases/<id> | jq -r ".name"
-    # curl -s https://api.github.com/repos/docker/compose/releases/<id> | jq -r ".assets[] | select(.name | test(\"Linux-x86_64\")) | .browser_download_url"
+#- name: 'install : compose'
+#  get_url:
+#    url: 'https://github.com/docker/compose/releases/download/1.11.1/docker-compose-Linux-x86_64'
+#    dest: /usr/local/bin/docker-compose
+#    mode: 0755
+#    # TODO: One could use the GitHub API to determine and download the lastest version:
+#    # curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r ".id"
+#    # curl -s https://api.github.com/repos/docker/compose/releases/<id> | jq -r ".name"
+#    # curl -s https://api.github.com/repos/docker/compose/releases/<id> | jq -r ".assets[] | select(.name | test(\"Linux-x86_64\")) | .browser_download_url"
