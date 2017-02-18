@@ -119,11 +119,13 @@ project_services:
     depends_on:
       - db
     volumes:
-      - '/web/:/www'
+      - source: '/web'
+        destination: '/www'
   db:
     image: 'mongo:latest'
     volumes:
-      - '/db/:/data/db'
+      - source: '/db'
+        destination: '/data/db'
 
 project_expose:
   web:
