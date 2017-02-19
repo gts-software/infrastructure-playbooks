@@ -17,7 +17,7 @@ unzip "$TMP_FILE"
 rm "$TMP_FILE"
 
 # move inventory template to the top
-mv ./infrastructure-playbooks/templates/inventory/* .
+mv ./infrastructure-playbooks-master/templates/inventory/* .
 
 # delete the rest
-rm -r ./infrastructure-playbooks
+rm -r ./infrastructure-playbooks-master
