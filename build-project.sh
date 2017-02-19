@@ -29,10 +29,10 @@ do
   esac
 done
 
-${PROJECT_SOURCE:="`pwd`"}
-${PROJECT_MODE:='staging'}
-${PROJECT_BRANCH:="`cd "$PROJECT_SOURCE"; git rev-parse --abbrev-ref HEAD 2> /dev/null || echo 'unknown'`"}
-${PROJECT_VERSION:="`cd "$PROJECT_SOURCE"; git rev-parse --verify HEAD 2> /dev/null || echo 'unknown'`"}
+: ${PROJECT_SOURCE:="`pwd`"}
+: ${PROJECT_MODE:='staging'}
+: ${PROJECT_BRANCH:="`cd "$PROJECT_SOURCE"; git rev-parse --abbrev-ref HEAD 2> /dev/null || echo 'unknown'`"}
+: ${PROJECT_VERSION:="`cd "$PROJECT_SOURCE"; git rev-parse --verify HEAD 2> /dev/null || echo 'unknown'`"}
 
 echo "Build:"
 echo "* PLAYBOOK_DIR=$PLAYBOOK_DIR"
