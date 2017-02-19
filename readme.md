@@ -91,35 +91,51 @@ Coming soon...
 
 ## Manage a Project
 
-Run the following command to deploy a project:
+Run the following command to build a project (builds on localhost):
+
+```sh
+ansible-playbook ../infrastructure-playbooks/build-project.yml \
+  -e project_source=`pwd` \
+  -e project_mode=staging \
+  -e project_branch=develop \
+  -e project_version=1.0.1 \
+  -e '@project.yml'
+```
+
+Run the following command to deploy a project (deploys to project target):
 
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
   -e project_mode=staging \
   -e project_branch=develop \
-  -e project_version=test \
+  -e project_version=1.0.1 \
   -e '@project.yml'
 ```
 
 Define your project as follows:
 
 ```yml
+# naming parts used for service and network names
 project_group: example
 project_name: simple
 
+# images to be build and registered
 project_images:
   app:
     dockerfile: Dockerfile
     repository: quay.io/process_team/example-simple-app
 
+# domains used to serve the application
 project_domains:
   staging: staging.simple-example.local
   production: simple-example.local
 
+# hosts used to serve the application
 project_target:
   staging: staging.server.example.local
   production: production.server.example.local
 
+# service composition (will be connected through their own network)
 project_services:
   web:
     image: 'project:app'
@@ -132,6 +148,7 @@ project_services:
       - source: '/db'
         destination: '/data/db'
 
+# services to be exposed via reverse proxy
 project_expose:
   web:
     port: 80
@@ -139,6 +156,7 @@ project_expose:
       - '@'
       - www
 
+# backups to be performed
 project_backup:
   db:
     dbdata:
