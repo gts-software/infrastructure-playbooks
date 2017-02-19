@@ -96,7 +96,6 @@ Run the following command to deploy a project:
 
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
-  -e target=server.example.com \
   -e project_mode=staging \
   -e project_branch=develop \
   -e project_version=test \
@@ -110,8 +109,12 @@ project_group: mega
 project_name: community
 
 project_domains:
-  staging: staging.mega-community.com
-  production: mega-community.com
+  staging: staging.example.local
+  production: example.local
+
+project_target:
+  staging: alpha
+  production: alpha
 
 project_services:
   web:
