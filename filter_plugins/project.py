@@ -50,6 +50,7 @@ def project_get_service_labels(project, service):
         result['traefik.backend'] = project_get_service_name(project, service)
         result['traefik.frontend.rule'] = 'Host:' + ','.join( map( lambda x : qualify_domain(x, project_get_domain(project)), project['expose'][service]['domains'] ) )
         result['traefik.port'] = str(project['expose'][service]['port'])
+        result['traefik.docker.network'] = 'core_gate'
     if service in project['backup']:
         def backupdef(id):
             result = { 'id': id }
