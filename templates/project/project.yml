@@ -11,8 +11,8 @@ project_domains:
   production: simple-example.local
 
 project_target:
-  staging: staging-server.example.local
-  production: production-cluster.example.local
+  staging: staging.server.example.local
+  production: production.server.example.local
 
 project_services:
   web:

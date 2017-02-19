@@ -104,25 +104,28 @@ ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
 Define your project as follows:
 
 ```yml
-project_group: mega
-project_name: community
+project_group: example
+project_name: simple
+
+project_images:
+  app:
+    dockerfile: Dockerfile
+    repository: quay.io/process_team/example-simple-app
 
 project_domains:
-  staging: staging.example.local
-  production: example.local
+  staging: staging.simple-example.local
+  production: simple-example.local
 
 project_target:
-  staging: alpha
-  production: alpha
+  staging: staging.server.example.local
+  production: production.server.example.local
 
 project_services:
   web:
-    image: 'dockercloud/hello-world:latest'
+    image: 'project:app'
     depends_on:
       - db
-    volumes:
-      - source: '/web'
-        destination: '/www'
+    volumes: []
   db:
     image: 'mongo:latest'
     volumes:
