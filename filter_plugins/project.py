@@ -67,6 +67,9 @@ def project_get_service_env(project, service):
         'PROJECT_GROUP':   project['group'],
         'PROJECT_NAME':    project['name'],
     }
+    if 'env' in project['services'][service]:
+        for envKey in project['services'][service]['env']:
+            result[envKey] = project['services'][service]['env'][envKey]
     return result
 
 def project_get_service_volumes(project, service):
@@ -76,7 +79,7 @@ def project_get_service_volumes(project, service):
         if 'flags' in volume:
             result += ':' + volume['flags']
         return result
-    return map(volumedef, project['services'][service]['volumes'])
+    return map(volumedef, project['services'][service]['volumes'] if 'volumes' in project['services'][service] else [])
 
 def project_get_service_networks(project, service):
     result = [ { 'name': project_get_network(project), 'aliases': [ service ] } ]

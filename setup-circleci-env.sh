@@ -24,4 +24,8 @@ fi
 echo "export PROJECT_BRANCH=$CIRCLE_BRANCH" >> .circlerc
 echo "export PROJECT_VERSION=$CIRCLE_SHA1" >> .circlerc
 
+# docker login
+echo "Docker login..."
+docker login --username ${QUAY_USER} --password ${QUAY_PASS} quay.io
+
 echo "Done!"
