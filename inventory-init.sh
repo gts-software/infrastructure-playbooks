@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-TEMPLATE_URL="https://github.com/core-process/infrastructure-inventory-example/archive/master.zip"
+TEMPLATE_URL="https://github.com/core-process/infrastructure-playbooks/archive/master.zip"
 
 # check if pwd is empty
 if [ "`ls -1`" ];
@@ -10,14 +10,14 @@ then
   exit 1
 fi
 
-# download and extract template
+# download and extract archive
 TMP_FILE="`mktemp`"
 curl -q -f -L -o "$TMP_FILE" "$TEMPLATE_URL"
 unzip "$TMP_FILE"
 rm "$TMP_FILE"
 
-# move one level up
-for d in `ls -1`
-do
-  mv "$d"/* . && rmdir "$d"
-done
+# move inventory template to the top
+mv ./infrastructure-playbooks/templates/inventory/* .
+
+# delete the rest
+rm -r ./infrastructure-playbooks

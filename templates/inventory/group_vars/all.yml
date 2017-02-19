@@ -1,0 +1,14 @@
+# base
+base_name_domain: example.com
+base_devops_email: devops@example.com
+
+# logging
+logging_token: a6b1ba33-5881-40f2-a483-7aaf7572d3e3
+
+# backup
+backup_interval: '0 3 * * *' # every day at 3 am (cron time format)
+backup_full_every: '1M' # 1 month (see duplicity time formats)
+backup_remove_older_than: '1Y' # 1 year
+backup_storage_url: 's3://s3-eu-central-1.amazonaws.com/some-bucket'
+backup_storage_key_id: '7M1VGFL6T10A8YURMQAH'
+backup_storage_secret_key: 'HvbMb9v8dWXKus0GZQTVT4kheBgSz7er0fde5svx'

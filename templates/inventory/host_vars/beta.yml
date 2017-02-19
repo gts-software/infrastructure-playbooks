@@ -1,0 +1,7 @@
+# ansible
+ansible_host: beta.example.com
+ansible_user: root
+ansible_password: CzQmaCOBAehy85By0q9jOAKxDUHZbAOjFCtqzs20lYKfHQpt6O1bfUeZvzu53sJK
+
+# base
+base_name_host: beta

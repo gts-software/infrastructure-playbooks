@@ -1,0 +1,7 @@
+# ansible
+ansible_host: alpha.example.com
+ansible_user: root
+ansible_password: q9ShgTbqnr37z56qQm7zbDk7FL0UCp9eaWr2DzZ1bxEgOp7bhpuZ3NHpBLgpQ4Fc
+
+# base
+base_name_host: alpha
