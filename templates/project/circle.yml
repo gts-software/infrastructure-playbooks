@@ -13,7 +13,7 @@ dependencies:
 # build project
 compile:
   override:
-    - ansible-playbook $HOME/infrastructure-playbooks/build-project.yml -e project_mode=$PROJECT_MODE -e project_branch=$CIRCLE_BRANCH -e project_version=$CIRCLE_SHA1 -e @project.yml
+    - ansible-playbook $HOME/infrastructure-playbooks/build-project.yml -e project_source=`pwd` -e project_mode=$PROJECT_MODE -e project_branch=$CIRCLE_BRANCH -e project_version=$CIRCLE_SHA1 -e @project.yml
 
 # deploy project
 deployment:
