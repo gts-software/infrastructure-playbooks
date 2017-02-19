@@ -20,8 +20,8 @@
       CONFIG_STORAGE_SECRET_KEY: '{{ backup_storage_secret_key | default("") }}'
     volumes:
       - '/:/host:ro'
-      - '{{ base_data_dir }}/core_backup/backups/:/backups'
-      - '{{ base_data_dir }}/core_backup/backups-tmp/:/backups-tmp'
+      - '/data/core_backup/backups/:/backups'
+      - '/data/core_backup/backups-tmp/:/backups-tmp'
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
     networks:
       - name: bridge

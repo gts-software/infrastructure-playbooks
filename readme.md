@@ -69,7 +69,6 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | **Base** | | |
 | base_name_host | Hostname to be applied | `alpha` |
 | base_name_domain | Domainname to be applied | `example.com` |
-| base_data_dir | The base data directory for all containers | `/data` |
 | base_devops_email | Email address of the DevOps team | `devops@example.com` |
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |

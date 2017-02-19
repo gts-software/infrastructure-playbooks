@@ -22,7 +22,7 @@
       image:    '{{ project | project_get_service_image(service) }}'
       pull:     '{{ docker_pull | default(false) | bool }}'
       labels:   '{{ project | project_get_service_labels(service) }}'
-      volumes:  '{{ project | project_get_service_volumes(service, base_data_dir) }}'
+      volumes:  '{{ project | project_get_service_volumes(service) }}'
       networks: '{{ project | project_get_service_networks(service) }}'
       purge_networks: true
       restart_policy: 'on-failure'

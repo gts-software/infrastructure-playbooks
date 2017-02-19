@@ -58,9 +58,9 @@ def project_get_service_labels(project, service):
         result['backup'] = yaml.safe_dump(map(backupdef , project['backup'][service].keys()), default_flow_style=True)
     return result
 
-def project_get_service_volumes(project, service, data_dir):
+def project_get_service_volumes(project, service):
     def volumedef(volume) :
-        result = os.path.normpath( data_dir + '/' + project_get_service_name(project, service) + '/' + volume['source'] )
+        result = os.path.normpath( '/data/' + project_get_service_name(project, service) + '/' + volume['source'] )
         result += ':' + os.path.normpath( volume['destination'] )
         if 'flags' in volume:
             result += ':' + volume['flags']
