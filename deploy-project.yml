@@ -1,5 +1,5 @@
 - name: 'deploy project'
-  hosts: '{{ target }}'
+  hosts: '{{ project_target | project_get_target(project_mode) }}'
   tasks:
   - name: 'specification'
     set_fact:
@@ -30,4 +30,4 @@
     with_items: '{{ project | project_get_services }}'
     loop_control:
       loop_var: service
-      pause: 5
+      pause: 1

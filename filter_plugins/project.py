@@ -7,13 +7,18 @@ def qualify_domain(subdomain, domain):
         return domain;
     return '{0}.{1}'.format(subdomain, domain)
 
+def project_get_target(target, mode):
+    if isinstance(target, basestring):
+        return target
+    return target[mode]
+
 def project_get_network(project):
     return '{0}_{1}_{2}_{3}'.format(project['group'], project['name'], project['mode'], project['branch'])
 
 def project_get_domain(project):
     if project['mode'] == 'staging':
         return '{0}.{1}'.format(project['branch'], project['domains']['staging'])
-    return project['domains']['production']
+    return project['domains'][project['mode']]
 
 def project_get_services(project):
     result = { }
@@ -75,6 +80,7 @@ class FilterModule(object):
 
     def filters(self):
         return {
+            'project_get_target'           : project_get_target,
             'project_get_network'          : project_get_network,
             'project_get_services'         : project_get_services,
             'project_get_service_name'     : project_get_service_name,
