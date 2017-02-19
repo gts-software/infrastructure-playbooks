@@ -33,7 +33,7 @@ def project_get_service_name(project, service):
 def project_get_service_image(project, service):
     image = project['services'][service]['image']
     if image.startswith('project:'):
-        return project['images'][image[8:]]['repository']
+        return project['images'][image[8:]]['repository'] + ':' + project['mode'] + '_' + project['branch'] + '_' + project['version']
     return image;
 
 def project_get_service_labels(project, service):
@@ -95,7 +95,7 @@ def project_get_image_repository(project, image):
     return project['images'][image]['repository']
 
 def project_get_image_tag(project, image):
-    return project['version']
+    return project['mode'] + '_' + project['branch'] + '_' + project['version']
 
 def project_get_image_buildargs(project, image):
     result = {
