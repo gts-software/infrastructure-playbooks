@@ -10,3 +10,15 @@
     - mc
     - curl
     - jq
+
+- name: 'install essentials : pip and virtualenv'
+  apt: name='{{item}}' state=latest
+  with_items:
+    - python-pip
+    - python-virtualenv
+
+- name: 'install essentials : pip and toposort'
+  pip: name='{{item}}' state=latest
+  with_items:
+    - pip
+    - toposort

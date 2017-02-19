@@ -1,30 +1,6 @@
 import os
 import yaml
-
-def topological_sort(source):
-    """perform topo sort on elements.
-
-    :arg source: list of ``(name, [list of dependancies])`` pairs
-    :returns: list of names, with dependancies listed first
-    """
-    pending = [(name, set(deps)) for name, deps in source] # copy deps so we can modify set in-place
-    emitted = []
-    while pending:
-        next_pending = []
-        next_emitted = []
-        for entry in pending:
-            name, deps = entry
-            deps.difference_update(emitted) # remove deps we emitted last pass
-            if deps: # still has deps? recheck during next pass
-                next_pending.append(entry)
-            else: # no more deps? time to emit
-                yield name
-                emitted.append(name) # <-- not required, but helps preserve original ordering
-                next_emitted.append(name) # remember what we emitted for difference_update() in next pass
-        if not next_emitted: # all entries have unmet deps, one of two things is wrong...
-            raise ValueError("cyclic or missing dependancy detected: %r" % (next_pending,))
-        pending = next_pending
-        emitted = next_emitted
+import toposort
 
 def qualify_domain(subdomain, domain):
     if subdomain == '@':
@@ -40,7 +16,11 @@ def project_get_domain(project):
     return project['domains']['production']
 
 def project_get_services(project):
-    return project['services'].keys()
+    result = { }
+    for service in project['services']:
+        result[service] = set(project['services'][service].get('depends_on', []))
+    result = toposort.toposort_flatten(result)
+    return result
 
 def project_get_service_name(project, service):
     return '{0}_{1}_{2}_{3}_{4}'.format(project['group'], project['name'], project['mode'], project['branch'], service)
