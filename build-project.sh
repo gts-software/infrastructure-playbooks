@@ -33,4 +33,12 @@ ${PROJECT_MODE:='staging'}
 ${PROJECT_BRANCH:="`git rev-parse --abbrev-ref HEAD 2> /dev/null || echo 'unknown'`"}
 ${PROJECT_VERSION:="`git rev-parse --verify HEAD 2> /dev/null || echo 'unknown'`"}
 
+echo "Build:"
+echo "* PLAYBOOK_DIR=$PLAYBOOK_DIR"
+echo "* PROJECT_SOURCE=$PROJECT_SOURCE"
+echo "* PROJECT_MODE=$PROJECT_MODE"
+echo "* PROJECT_BRANCH=$PROJECT_BRANCH"
+echo "* PROJECT_VERSION=$PROJECT_VERSION"
+
 ansible-playbook $PLAYBOOK_DIR/build-project.yml -e project_source=$PROJECT_SOURCE -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @project.yml
+echo "Done!"
