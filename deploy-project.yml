@@ -4,6 +4,7 @@
   - name: 'node'
     add_host:
       name: '{{ project_target | project_get_target(project_mode) }}'
+      ansible_user: root
 
 - name: 'deploy project'
   hosts: '{{ project_target | project_get_target(project_mode) }}'

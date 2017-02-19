@@ -1,6 +1,9 @@
 # base
 base_name_domain: example.com
 base_devops_email: devops@example.com
+base_authorized_keys: |
+  ssh-rsa AAA...jXBlJgNch2yw== admin@example.local
+  ssh-rsa AAA...PwkcykEUzxeyc= circleci@example.local
 
 # logging
 logging_token: a6b1ba33-5881-40f2-a483-7aaf7572d3e3

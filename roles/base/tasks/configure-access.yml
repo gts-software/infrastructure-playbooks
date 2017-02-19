@@ -1,0 +1,6 @@
+- name: 'configure access : ssh keys'
+  authorized_key:
+    user: '{{ ansible_user }}'
+    key: '{{ base_authorized_keys }}'
+    exclusive: true
+    manage_dir: true

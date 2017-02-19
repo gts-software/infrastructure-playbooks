@@ -1,3 +1,4 @@
+- include: configure-access.yml
 - include: install-essentials.yml
 - include: upgrade-system.yml
 - include: configure-kernel.yml
