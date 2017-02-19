@@ -1,0 +1,40 @@
+project_group: example
+project_name: simple
+
+project_images:
+  app:
+    dockerfile: Dockerfile
+    repository: quay.io/process_team/example-simple-app
+
+project_domains:
+  staging: staging.simple-example.local
+  production: simple-example.local
+
+project_target:
+  staging: staging-server.example.local
+  production: production-cluster.example.local
+
+project_services:
+  web:
+    image: 'project:app'
+    depends_on:
+      - db
+    volumes: []
+  db:
+    image: 'mongo:latest'
+    volumes:
+      - source: '/db'
+        destination: '/data/db'
+
+project_expose:
+  web:
+    port: 80
+    domains:
+      - '@'
+      - www
+
+project_backup:
+  db:
+    dbdata:
+      type: mongodb
+      port: 27017

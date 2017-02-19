@@ -1,0 +1,21 @@
+machine:
+  post:
+    - curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-1.13.1.tgz && sudo tar --strip-components=1 -xvzf docker-1.13.1.tgz -C /usr/local/bin && sudo container=yes docker daemon: { background: true }
+    - sudo pip install --upgrade pip && sudo pip install ansible
+    - curl -q -f -L -o infrastructure-playbooks.zip https://github.com/core-process/infrastructure-playbooks/archive/master.zip && unzip infrastructure-playbooks.zip
+
+dependencies:
+  override:
+    - if [[ "${GIT_BRANCH}" == "production" ]]; then echo "export PROJECT_MODE=production" >> $HOME/.circlerc; else echo "export PROJECT_MODE=staging" >> $HOME/.circlerc; fi
+    - echo "export PROJECT_BRANCH=$CIRCLE_BRANCH" >> $HOME/.circlerc
+    - echo "export PROJECT_VERSION=$CIRCLE_SHA1" >> $HOME/.circlerc
+
+compile:
+  override:
+    - ansible-playbook $HOME/infrastructure-playbooks/build-project.yml -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @project.yml
+
+deployment:
+  staging:
+    branch: [ production, master, develop ]
+    commands:
+      - ansible-playbook $HOME/infrastructure-playbooks/deploy-project.yml -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @project.yml

@@ -1,0 +1,5 @@
+- name: 'build project'
+  hosts: 'localhost'
+  roles:
+    - project-facts
+    - project-build

@@ -1,33 +1,12 @@
+- name: 'prepare'
+  hosts: 'localhost'
+  tasks:
+  - name: 'node'
+    add_host:
+      name: '{{ project_target | project_get_target(project_mode) }}'
+
 - name: 'deploy project'
   hosts: '{{ project_target | project_get_target(project_mode) }}'
-  tasks:
-  - name: 'specification'
-    set_fact:
-      project:
-        mode:     '{{ project_mode }}'
-        branch:   '{{ project_branch }}'
-        version:  '{{ project_version }}'
-        group:    '{{ project_group }}'
-        name:     '{{ project_name }}'
-        domains:  '{{ project_domains }}'
-        services: '{{ project_services }}'
-        expose:   '{{ project_expose }}'
-        backup:   '{{ project_backup }}'
-  - name: 'network'
-    docker_network:
-      name: '{{ project | project_get_network }}'
-  - name: 'container'
-    docker_container:
-      name:     '{{ project | project_get_service_name(service) }}'
-      image:    '{{ project | project_get_service_image(service) }}'
-      pull:     '{{ docker_pull | default(false) | bool }}'
-      labels:   '{{ project | project_get_service_labels(service) }}'
-      volumes:  '{{ project | project_get_service_volumes(service) }}'
-      networks: '{{ project | project_get_service_networks(service) }}'
-      purge_networks: true
-      restart_policy: 'on-failure'
-      restart_retries: 5
-    with_items: '{{ project | project_get_services }}'
-    loop_control:
-      loop_var: service
-      pause: 1
+  roles:
+    - project-facts
+    - project-deploy

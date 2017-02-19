@@ -1,0 +1,11 @@
+- name: 'project build : image'
+  docker_image:
+    path: '{{ project_source }}'
+    dockerfile: '{{ project | project_get_image_dockerfile(image, project_source) }}'
+    name: '{{ project | project_get_image_repository(image) }}'
+    tag: '{{ project | project_get_image_tag(image) }}'
+    buildargs: '{{ project | project_get_image_buildargs(image) }}'
+    push: yes
+  with_items: '{{ project | project_get_images }}'
+  loop_control:
+    loop_var: image

@@ -31,10 +31,10 @@ def project_get_service_name(project, service):
     return '{0}_{1}_{2}_{3}_{4}'.format(project['group'], project['name'], project['mode'], project['branch'], service)
 
 def project_get_service_image(project, service):
-    image = project['services'][service]['image'].split(':', 1)
-    if len(image) == 1:
-        image.append(project['version'])
-    return ':'.join(image);
+    image = project['services'][service]['image']
+    if image.startswith('project:'):
+        return project['images'][image[8:]]['repository']
+    return image;
 
 def project_get_service_labels(project, service):
     result = {
@@ -58,6 +58,16 @@ def project_get_service_labels(project, service):
         result['backup'] = yaml.safe_dump(map(backupdef , project['backup'][service].keys()), default_flow_style=True)
     return result
 
+def project_get_service_env(project, service):
+    result = {
+        'PROJECT_MODE':    project['mode'],
+        'PROJECT_BRANCH':  project['branch'],
+        'PROJECT_VERSION': project['version'],
+        'PROJECT_GROUP':   project['group'],
+        'PROJECT_NAME':    project['name'],
+    }
+    return result
+
 def project_get_service_volumes(project, service):
     def volumedef(volume) :
         result = os.path.normpath( '/data/' + project_get_service_name(project, service) + '/' + volume['source'] )
@@ -75,6 +85,28 @@ def project_get_service_networks(project, service):
         result.append({ 'name': 'core_backup' })
     return result
 
+def project_get_images(project):
+    return project['images'].keys()
+
+def project_get_image_dockerfile(project, image, source):
+    return os.path.normpath(source + '/' + project['images'][image]['dockerfile'])
+
+def project_get_image_repository(project, image):
+    return project['images'][image]['repository']
+
+def project_get_image_tag(project, image):
+    return project['version']
+
+def project_get_image_buildargs(project, image):
+    result = {
+        'PROJECT_MODE':    project['mode'],
+        'PROJECT_BRANCH':  project['branch'],
+        'PROJECT_VERSION': project['version'],
+        'PROJECT_GROUP':   project['group'],
+        'PROJECT_NAME':    project['name'],
+    }
+    return result
+
 class FilterModule(object):
     ''' Ansible project jinja2 filters '''
 
@@ -86,6 +118,12 @@ class FilterModule(object):
             'project_get_service_name'     : project_get_service_name,
             'project_get_service_image'    : project_get_service_image,
             'project_get_service_labels'   : project_get_service_labels,
+            'project_get_service_env'      : project_get_service_env,
             'project_get_service_volumes'  : project_get_service_volumes,
             'project_get_service_networks' : project_get_service_networks,
+            'project_get_images'           : project_get_images,
+            'project_get_image_dockerfile' : project_get_image_dockerfile,
+            'project_get_image_repository' : project_get_image_repository,
+            'project_get_image_tag'        : project_get_image_tag,
+            'project_get_image_buildargs'  : project_get_image_buildargs,
         }
