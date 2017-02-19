@@ -5,6 +5,7 @@
     name: '{{ project | project_get_image_repository(image) }}'
     tag: '{{ project | project_get_image_tag(image) }}'
     buildargs: '{{ project | project_get_image_buildargs(image) }}'
+    nocache: true
     push: yes
   with_items: '{{ project | project_get_images }}'
   loop_control:
