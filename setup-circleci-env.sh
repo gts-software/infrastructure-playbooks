@@ -10,7 +10,7 @@ sudo pip install ansible docker-py toposort
 
 # setup environment
 echo "Setting up Environment..."
-if [[ "${GIT_BRANCH}" == "production" ]];
+if [[ "${CIRCLE_BRANCH}" == "production" ]];
 then
   echo "export PROJECT_MODE=production" >> .circlerc
 else
