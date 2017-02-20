@@ -1,16 +1,20 @@
 # install docker, ansible and playbooks
 machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+    - docker
   post:
-    - curl -q -f -L -o infrastructure-playbooks.zip https://github.com/core-process/infrastructure-playbooks/archive/master.zip && unzip infrastructure-playbooks.zip && bash ./infrastructure-playbooks/setup-circleci-env.sh
+    - curl -q -f -L -o infrastructure-playbooks.zip https://github.com/core-process/infrastructure-playbooks/archive/master.zip && unzip infrastructure-playbooks.zip && bash ./infrastructure-playbooks-master/setup-circleci-env.sh
 
 # build project
 compile:
   override:
-    - bash $HOME/infrastructure-playbooks/build-project.sh
+    - bash $HOME/infrastructure-playbooks-master/build-project.sh
 
 # deploy project
 deployment:
   staging:
     branch: [ production, master, develop ]
     commands:
-      - bash $HOME/infrastructure-playbooks/deploy-project.sh
+      - bash $HOME/infrastructure-playbooks-master/deploy-project.sh
