@@ -33,10 +33,11 @@ project_services:
 # services to be exposed via reverse proxy
 project_expose:
   web:
-    port: 3000
-    domains:
-      - '@'
-      - www
+    - type: http
+      port: 3000
+      domains:
+        - '@'
+        - www
 
 # backups to be performed
 project_backup:

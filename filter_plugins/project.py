@@ -57,11 +57,13 @@ def filter_get_service_labels(project, service):
         'project.service': service,
     }
     if service in project['expose']:
-        result['traefik.enable'] = 'true'
-        result['traefik.backend'] = get_service_codename(project, service)
-        result['traefik.frontend.rule'] = 'Host:' + ','.join( map( lambda subdomain : get_subdomain(project, subdomain), project['expose'][service]['domains'] ) )
-        result['traefik.port'] = str(project['expose'][service]['port'])
-        result['traefik.docker.network'] = 'core_gate'
+        for item in project['expose'][service]:
+            if item['type'] == 'http':
+                result['traefik.enable'] = 'true'
+                result['traefik.backend'] = get_service_codename(project, service)
+                result['traefik.frontend.rule'] = 'Host:' + ','.join( map( lambda subdomain : get_subdomain(project, subdomain), item['domains'] ) )
+                result['traefik.port'] = str(item['port'])
+                result['traefik.docker.network'] = 'core_gate'
     if service in project['backup']:
         def backupdef(id):
             result = { 'id': id }
@@ -102,9 +104,15 @@ def filter_get_service_volumes(project, service):
 def filter_get_service_networks(project, service):
     result = [ { 'name': get_project_codename(project), 'aliases': [ service ] } ]
     if service in project['expose']:
-        result.append({ 'name': 'core_gate' })
+        for item in project['expose'][service]:
+            if item['type'] == 'http':
+                result.append({ 'name': 'core_gate' })
+                break
     if service in project['backup']:
-        result.append({ 'name': 'core_backup' })
+        for item in project['backup'][service]:
+            if item['type'] != 'mount':
+                result.append({ 'name': 'core_backup' })
+                break
     return result
 
 def filter_get_images(project):
