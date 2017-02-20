@@ -20,6 +20,6 @@ deployment:
       - bash $HOME/infrastructure-playbooks-master/deploy-project.sh
 
 # clear dependencies, database and test
-dependencies: { override: [] }
-database: { override: [] }
-test: { override: [] }
+dependencies: { override: [ 'echo skip' ] }
+database: { override: [ 'echo skip' ] }
+test: { override: [ 'echo skip' ] }
