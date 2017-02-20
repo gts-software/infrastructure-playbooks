@@ -18,3 +18,8 @@ deployment:
     branch: [ production, master, develop ]
     commands:
       - bash $HOME/infrastructure-playbooks-master/deploy-project.sh
+
+# clear dependencies, database and test
+dependencies: { override: [] }
+database: { override: [] }
+test: { override: [] }
