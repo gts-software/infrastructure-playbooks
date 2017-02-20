@@ -24,11 +24,10 @@ project_services:
     image: 'project:app'
     depends_on:
       - db
-    volumes: []
   db:
     image: 'mongo:latest'
     volumes:
-      - source: '/db'
+      - source: 'service:/db'
         destination: '/data/db'
 
 # services to be exposed via reverse proxy
