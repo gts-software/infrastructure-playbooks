@@ -90,7 +90,7 @@ def filter_get_service_volumes(project, service):
             result += get_project_codename(project) + '/' + volume['source'][8:]
         elif volume['source'].startswith('service:'):
             result += get_service_codename(project, service) + '/' + volume['source'][8:]
-        else
+        else:
             raise ValueError('invalid source', volume['source'])
         result = os.path.normpath( result )
         result += ':' + os.path.normpath( volume['destination'] )
