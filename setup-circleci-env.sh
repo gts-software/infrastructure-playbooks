@@ -4,6 +4,7 @@ cd "$HOME"
 
 # setup ansible
 echo "Setting up Ansible..."
+sudo apt-get install python-dev
 sudo pip install --upgrade pip
 sudo pip install ansible docker-py toposort
 
