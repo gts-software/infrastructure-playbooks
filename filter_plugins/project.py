@@ -14,9 +14,13 @@ def get_subdomain(project, subdomain):
     return '{0}.{1}'.format(subdomain, domain)
 
 def get_project_codename(project):
+    if project['mode'] == 'production':
+        return '{0}_{1}_{2}'.format(project['group'], project['name'], project['mode'])
     return '{0}_{1}_{2}_{3}'.format(project['group'], project['name'], project['mode'], project['branch'])
 
 def get_service_codename(project, service):
+    if project['mode'] == 'production':
+        return '{0}_{1}_{2}_{3}'.format(project['group'], project['name'], project['mode'], service)
     return '{0}_{1}_{2}_{3}_{4}'.format(project['group'], project['name'], project['mode'], project['branch'], service)
 
 def filter_get_target(target, mode):
