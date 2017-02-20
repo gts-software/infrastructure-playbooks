@@ -1,2 +1,3 @@
 - include: repository.yml
 - include: install.yml
+- include: registry.yml

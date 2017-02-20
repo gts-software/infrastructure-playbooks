@@ -5,6 +5,10 @@ base_authorized_keys: |
   ssh-rsa AAA...jXBlJgNch2yw== admin@example.local
   ssh-rsa AAA...PwkcykEUzxeyc= circleci@example.local
 
+# quay
+quay_username: example+deployment
+quay_password: nVKU7EZLM9KpYTiwMViR9xS1kKXi9c2D8y8GyAKtsLMkaggCt5f91kPAkjV5Qi4Y
+
 # logging
 logging_token: a6b1ba33-5881-40f2-a483-7aaf7572d3e3
 
