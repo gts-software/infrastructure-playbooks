@@ -14,6 +14,12 @@ ENV PROJECT_VERSION=unknown
 ENV PROJECT_GROUP=unknown
 ENV PROJECT_NAME=unknown
 
+# upgrade system software
+RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" > /etc/apt/sources.list.d/debian-testing.list
+RUN echo "Package: *\nPin: release a=testing\nPin-Priority: 100" > /etc/apt/preferences.d/debian-testing.pref
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y -t testing gcc g++
+
 # copy application
 COPY ./app /app
 WORKDIR /app
