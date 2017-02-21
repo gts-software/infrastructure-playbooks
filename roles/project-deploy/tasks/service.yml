@@ -1,0 +1,25 @@
+- name: 'project deploy : container : {{ service }}'
+  docker_container:
+    name:            '{{ project | project_get_service_name(service) }}'
+    image:           '{{ project | project_get_service_image(service) }}'
+    pull:            '{{ docker_pull | default(false) | bool }}'
+    env:             '{{ project | project_get_service_env(service) }}'
+    labels:          '{{ project | project_get_service_labels(service) }}'
+    volumes:         '{{ project | project_get_service_volumes(service) }}'
+    networks:        '{{ project | project_get_service_networks(service) }}'
+    purge_networks:  true
+    published_ports: '{{ project | project_get_service_published_ports(service) }}'
+    capabilities:    '{{ project | project_get_service_capabilities(service) }}'
+    restart_policy:  'on-failure'
+    restart_retries: 5
+  async: 3600
+  poll: 0
+  register: deploy_wait
+
+- name: 'project deploy : container : {{ service }} : wait'
+  async_status:
+    jid: '{{ deploy_wait.ansible_job_id }}'
+  register: deploy_result
+  until: deploy_result.finished
+  retries: 360
+  delay: 10
