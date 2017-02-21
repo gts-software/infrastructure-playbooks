@@ -17,7 +17,7 @@ deployment:
   staging:
     branch: [ production, master, develop ]
     commands:
-      - bash $HOME/infrastructure-playbooks-master/deploy-project.sh
+      - bash $HOME/infrastructure-playbooks-master/deploy-project.sh -f
 
 # clear dependencies, database and test
 dependencies: { override: [ 'echo skip' ] }
