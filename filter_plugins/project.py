@@ -121,24 +121,25 @@ def filter_get_service_published_ports(project, service):
         for item in project['expose'][service]:
             if item['type'] == 'tcp':
                 cport = str(item['port'])
-                hport = cport
+                hport = None
                 if 'hostport' in item:
                     if project['mode'] == 'production' and 'production' in item['hostport']:
                         hport = str(item['hostport']['production'])
                     if project['mode'] == 'staging' and 'staging' in item['hostport']:
                         if project['branch'] in item['hostport']['staging']:
                             hport = str(item['hostport']['staging'][project['branch']])
-                cport = cport.split('-')
-                hport = hport.split('-')
-                if len(cport) != len(hport) or len(cport) > 2:
-                    raise ValueError('invalid port specification')
-                if len(cport) == 1:
-                    result.append(cport[0] + ':' + hport[0])
-                else:
-                    if (int(cport[1]) - int(cport[0])) != (int(hport[1]) - int(hport[0])):
+                if hport is not None:
+                    cport = cport.split('-')
+                    hport = hport.split('-')
+                    if len(cport) != len(hport) or len(cport) > 2:
                         raise ValueError('invalid port specification')
-                    for i in range(0, int(cport[1]) - int(cport[0]) + 2):
-                        result.append(str(int(cport) + i) + ':' + str(int(hport) + i))
+                    if len(cport) == 1:
+                        result.append(cport[0] + ':' + hport[0])
+                    else:
+                        if (int(cport[1]) - int(cport[0])) != (int(hport[1]) - int(hport[0])):
+                            raise ValueError('invalid port specification')
+                        for i in range(0, int(cport[1]) - int(cport[0]) + 2):
+                            result.append(str(int(cport[0]) + i) + ':' + str(int(hport[0]) + i))
     return result
 
 
