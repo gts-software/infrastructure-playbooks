@@ -133,8 +133,10 @@ def filter_get_service_published_ports(project, service):
                 if len(cport) != len(hport) or len(cport) > 2:
                     raise ValueError('invalid port specification')
                 if len(cport) == 1:
-                    result.append(cport + ':' + hport)
+                    result.append(cport[0] + ':' + hport[0])
                 else:
+                    if (int(cport[1]) - int(cport[0])) != (int(hport[1]) - int(hport[0])):
+                        raise ValueError('invalid port specification')
                     for i in range(0, int(cport[1]) - int(cport[0]) + 2):
                         result.append(str(int(cport) + i) + ':' + str(int(hport) + i))
     return result
