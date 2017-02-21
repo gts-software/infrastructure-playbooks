@@ -80,9 +80,9 @@ def filter_get_service_env(project, service):
         'PROJECT_GROUP':   project['group'],
         'PROJECT_NAME':    project['name'],
     }
-    if 'env' in project['services'][service]:
-        for envKey in project['services'][service]['env']:
-            result[envKey] = project['services'][service]['env'][envKey]
+    if 'environment' in project['services'][service]:
+        for envKey in project['services'][service]['environment']:
+            result[envKey] = project['services'][service]['environment'][envKey]
     return result
 
 def filter_get_service_volumes(project, service):
