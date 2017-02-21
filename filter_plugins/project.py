@@ -115,6 +115,36 @@ def filter_get_service_networks(project, service):
                 break
     return result
 
+def filter_get_service_published_ports(project, service):
+    result = [ ]
+    if service in project['expose']:
+        for item in project['expose'][service]:
+            if item['type'] == 'tcp':
+                cport = str(item['port'])
+                hport = cport
+                if 'hostport' in item:
+                    if project['mode'] == 'production' and 'production' in item['hostport']:
+                        hport = str(item['hostport']['production'])
+                    if project['mode'] == 'staging' and 'staging' in item['hostport']:
+                        if project['branch'] in item['hostport']['staging']:
+                            hport = str(item['hostport']['staging'][project['branch']])
+                cport = cport.split('-')
+                hport = hport.split('-')
+                if len(cport) != len(hport) or len(cport) > 2:
+                    raise ValueError('invalid port specification')
+                if len(cport) == 1:
+                    result.append(cport + ':' + hport)
+                else:
+                    for i in range(0, int(cport[1]) - int(cport[0]) + 2):
+                        result.append(str(int(cport) + i) + ':' + str(int(hport) + i))
+    return result
+
+
+def filter_get_service_capabilities(project, service):
+    if 'capabilities' in project['services'][service]:
+        return project['services'][service]['capabilities']
+    return [ ]
+
 def filter_get_images(project):
     return project['images'].keys()
 
@@ -142,18 +172,20 @@ class FilterModule(object):
 
     def filters(self):
         return {
-            'project_get_target'           : filter_get_target,
-            'project_get_network'          : filter_get_network,
-            'project_get_services'         : filter_get_services,
-            'project_get_service_name'     : filter_get_service_name,
-            'project_get_service_image'    : filter_get_service_image,
-            'project_get_service_labels'   : filter_get_service_labels,
-            'project_get_service_env'      : filter_get_service_env,
-            'project_get_service_volumes'  : filter_get_service_volumes,
-            'project_get_service_networks' : filter_get_service_networks,
-            'project_get_images'           : filter_get_images,
-            'project_get_image_dockerfile' : filter_get_image_dockerfile,
-            'project_get_image_repository' : filter_get_image_repository,
-            'project_get_image_tag'        : filter_get_image_tag,
-            'project_get_image_buildargs'  : filter_get_image_buildargs,
+            'project_get_target'                  : filter_get_target,
+            'project_get_network'                 : filter_get_network,
+            'project_get_services'                : filter_get_services,
+            'project_get_service_name'            : filter_get_service_name,
+            'project_get_service_image'           : filter_get_service_image,
+            'project_get_service_labels'          : filter_get_service_labels,
+            'project_get_service_env'             : filter_get_service_env,
+            'project_get_service_volumes'         : filter_get_service_volumes,
+            'project_get_service_networks'        : filter_get_service_networks,
+            'project_get_service_published_ports' : filter_get_service_published_ports,
+            'project_get_service_capabilities'    : filter_get_service_capabilities,
+            'project_get_images'                  : filter_get_images,
+            'project_get_image_dockerfile'        : filter_get_image_dockerfile,
+            'project_get_image_repository'        : filter_get_image_repository,
+            'project_get_image_tag'               : filter_get_image_tag,
+            'project_get_image_buildargs'         : filter_get_image_buildargs,
         }
