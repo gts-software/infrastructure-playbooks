@@ -20,3 +20,5 @@
   loop_control:
     loop_var: service
     pause: 1
+  async: 3600
+  poll: 10
