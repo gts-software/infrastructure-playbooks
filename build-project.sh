@@ -3,10 +3,14 @@ set -e
 
 OLD_DIR="`pwd`"
 PLAYBOOK_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOCKER_PUSH="false"
 
-while getopts p:s:m:b:v: option
+while getopts rp:s:m:b:v: option
 do
   case "${option}" in
+    r)
+      DOCKER_PUSH="true"
+      ;;
     p)
       PLAYBOOK_DIR="$OPTARG"
       ;;
@@ -23,7 +27,8 @@ do
       PROJECT_VERSION="$OPTARG"
       ;;
     \?)
-      echo "Usage: $0 [-p playbook_dir] [-s project_source] [-m project_mode] [-p project_branch] [-v project_version]"
+      echo "Usage: $0 [-r] [-p playbook_dir] [-s project_source] [-m project_mode] [-p project_branch] [-v project_version]"
+      echo "           -r = push to registry"
       exit 1
       ;;
   esac
@@ -42,7 +47,7 @@ echo "* PROJECT_BRANCH=$PROJECT_BRANCH"
 echo "* PROJECT_VERSION=$PROJECT_VERSION"
 
 cd "$PLAYBOOK_DIR"
-ansible-playbook $PLAYBOOK_DIR/build-project.yml -e project_source=$PROJECT_SOURCE -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @$PROJECT_SOURCE/project.yml
+ansible-playbook $PLAYBOOK_DIR/build-project.yml -e docker_push=$DOCKER_PUSH -e project_source=$PROJECT_SOURCE -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @$PROJECT_SOURCE/project.yml
 
 cd "$OLD_DIR"
 echo "Done!"
