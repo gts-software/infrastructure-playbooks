@@ -109,8 +109,8 @@ def filter_get_service_networks(project, service):
                 result.append({ 'name': 'core_gate' })
                 break
     if service in project['backup']:
-        for item in project['backup'][service]:
-            if item['type'] != 'mount':
+        for id in project['backup'][service]:
+            if project['backup'][service][id]['type'] != 'mount':
                 result.append({ 'name': 'core_backup' })
                 break
     return result
