@@ -10,7 +10,7 @@ machine:
 # build project
 compile:
   override:
-    - bash $HOME/infrastructure-playbooks-master/build-project.sh
+    - bash $HOME/infrastructure-playbooks-master/build-project.sh -r
 
 # deploy project
 deployment:
