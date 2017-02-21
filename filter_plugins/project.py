@@ -148,8 +148,14 @@ def filter_get_service_capabilities(project, service):
 def filter_get_images(project):
     return project['images'].keys()
 
+def filter_get_image_path(project, image, source):
+    context = project['images'][image]['context'] if 'context' in project['images'][image] else ''
+    return os.path.normpath(source + '/' + context)
+
 def filter_get_image_dockerfile(project, image, source):
-    return os.path.normpath(source + '/' + project['images'][image]['dockerfile'])
+    context = project['images'][image]['context'] if 'context' in project['images'][image] else ''
+    dockerfile = project['images'][image]['dockerfile']
+    return os.path.normpath(source + '/' + context + '/' + dockerfile)
 
 def filter_get_image_repository(project, image):
     return project['images'][image]['repository']
@@ -184,6 +190,7 @@ class FilterModule(object):
             'project_get_service_published_ports' : filter_get_service_published_ports,
             'project_get_service_capabilities'    : filter_get_service_capabilities,
             'project_get_images'                  : filter_get_images,
+            'project_get_image_path'              : filter_get_image_path,
             'project_get_image_dockerfile'        : filter_get_image_dockerfile,
             'project_get_image_repository'        : filter_get_image_repository,
             'project_get_image_tag'               : filter_get_image_tag,

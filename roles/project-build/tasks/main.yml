@@ -1,6 +1,6 @@
 - name: 'project build : image'
   docker_image:
-    path: '{{ project_source }}'
+    path: '{{ project | project_get_image_path(image, project_source) }}'
     dockerfile: '{{ project | project_get_image_dockerfile(image, project_source) }}'
     name: '{{ project | project_get_image_repository(image) }}'
     tag: '{{ project | project_get_image_tag(image) }}'
