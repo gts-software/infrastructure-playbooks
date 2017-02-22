@@ -6,17 +6,21 @@ project_name: simple
 project_images:
   app:
     dockerfile: Dockerfile
-    repository: quay.io/process_team/example-simple-app
+    repository: quay.io/some/example
 
 # domains used to serve the application
 project_domains:
-  staging: staging.simple-example.local
-  production: simple-example.local
+  staging:
+    develop: example-staging-develop.local
+    master: example-staging-master.local
+  production: example.local
 
 # hosts used to serve the application
 project_target:
-  staging: staging.server.example.local
-  production: production.server.example.local
+  staging:
+    develop: example-staging-server.local
+    master: example-staging-server.local
+  production: example-production-server.local
 
 # service composition (will be connected through their own network)
 project_services:
