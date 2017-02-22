@@ -65,11 +65,22 @@ def filter_get_service_labels(project, service):
         'project.service': service,
     }
     if service in project['expose']:
+        def mapdomain(domain):
+            if isinstance(domain, dict):
+                if 'mode' not in domain or domain['mode'] == project['mode']:
+                    domain = domain['domain']
+                else
+                    domain = None
+            if domain is None:
+                return None
+            if domain.endswith('.'):
+                return domain[:-1]
+            return get_subdomain(project, domain)
         for item in project['expose'][service]:
             if item['type'] == 'http':
                 result['traefik.enable'] = 'true'
                 result['traefik.backend'] = get_service_codename(project, service)
-                result['traefik.frontend.rule'] = 'Host:' + ','.join( map( lambda subdomain : get_subdomain(project, subdomain), item['domains'] ) )
+                result['traefik.frontend.rule'] = 'Host:' + ','.join( filter( lambda x: x is not None, map( mapdomain, item['domains'] ) ) )
                 result['traefik.port'] = str(item['port'])
                 result['traefik.docker.network'] = 'core_gate'
     if service in project['backup']:
