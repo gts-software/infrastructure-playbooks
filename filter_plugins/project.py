@@ -69,7 +69,7 @@ def filter_get_service_labels(project, service):
             if isinstance(domain, dict):
                 if 'mode' not in domain or domain['mode'] == project['mode']:
                     domain = domain['domain']
-                else
+                else:
                     domain = None
             if domain is None:
                 return None
