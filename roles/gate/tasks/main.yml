@@ -10,15 +10,13 @@
     restart_policy: 'on-failure'
     restart_retries: 5
     state: started
-    # alternative entry point definition for http: redirect to https
-    # --entrypoints='Name:http Address::80 Redirect.Regex:^http://(?:www\.)?(.*) Redirect.Replacement:https://$$1'
     command: >
       --acme=true
       --acme.onhostrule=true
       --acme.email={{ base_devops_email }}
       --acme.storage=/certs/acme.json
       --acme.entrypoint=https
-      --entrypoints='Name:http Address::80'
+      --entrypoints='Name:http Address::80 Redirect.EntryPoint:https'
       --entrypoints='Name:https Address::443 TLS'
       --defaultentrypoints=https,http
       --docker=true
