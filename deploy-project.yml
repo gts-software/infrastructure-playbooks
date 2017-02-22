@@ -3,11 +3,11 @@
   tasks:
   - name: 'node'
     add_host:
-      name: '{{ project_target | project_get_target(project_mode) }}'
+      name: '{{ project_target | project_get_target(project_mode, project_branch) }}'
       ansible_user: root
 
 - name: 'deploy project'
-  hosts: '{{ project_target | project_get_target(project_mode) }}'
+  hosts: '{{ project_target | project_get_target(project_mode, project_branch) }}'
   roles:
     - project-facts
     - project-deploy

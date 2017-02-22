@@ -4,8 +4,10 @@ import toposort
 
 def get_domain(project):
     if project['mode'] == 'staging':
-        return '{0}.{1}'.format(project['branch'], project['domains']['staging'])
-    return project['domains'][project['mode']]
+        return project['domains']['staging'][project['branch']]
+    if project['mode'] == 'production':
+        return project['domains']['production']
+    raise ValueError('invalid mode')
 
 def get_subdomain(project, subdomain):
     domain = get_domain(project)
@@ -14,19 +16,25 @@ def get_subdomain(project, subdomain):
     return '{0}.{1}'.format(subdomain, domain)
 
 def get_project_codename(project):
+    if project['mode'] == 'staging':
+        return '{0}_{1}_staging_{2}'.format(project['group'], project['name'], project['branch'])
     if project['mode'] == 'production':
-        return '{0}_{1}_{2}'.format(project['group'], project['name'], project['mode'])
-    return '{0}_{1}_{2}_{3}'.format(project['group'], project['name'], project['mode'], project['branch'])
+        return '{0}_{1}_production'.format(project['group'], project['name'])
+    raise ValueError('invalid mode')
 
 def get_service_codename(project, service):
+    if project['mode'] == 'staging':
+        return '{0}_{1}_staging_{2}_{3}'.format(project['group'], project['name'], project['branch'], service)
     if project['mode'] == 'production':
-        return '{0}_{1}_{2}_{3}'.format(project['group'], project['name'], project['mode'], service)
-    return '{0}_{1}_{2}_{3}_{4}'.format(project['group'], project['name'], project['mode'], project['branch'], service)
+        return '{0}_{1}_production_{2}'.format(project['group'], project['name'], service)
+    raise ValueError('invalid mode')
 
-def filter_get_target(target, mode):
-    if isinstance(target, basestring):
-        return target
-    return target[mode]
+def filter_get_target(target, mode, branch):
+    if mode == 'staging':
+        return target['staging'][branch]
+    if mode == 'production':
+        return target['production']
+    raise ValueError('invalid mode')
 
 def filter_get_network(project):
     return get_project_codename(project)
