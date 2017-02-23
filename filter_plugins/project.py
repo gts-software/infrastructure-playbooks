@@ -165,6 +165,21 @@ def filter_get_service_capabilities(project, service):
         return project['services'][service]['capabilities']
     return [ ]
 
+def filter_get_service_state(project, service):
+    result = False
+    if 'active' in project['services'][service]:
+        active = project['services'][service]['active']
+        if isinstance(active, bool):
+            result = active
+        elif project['mode'] == 'production' and 'production' in active:
+            result = active['production']
+        elif project['mode'] == 'staging' and 'staging' in active:
+            if isinstance(active['staging'], bool):
+                result = active['staging']
+            else project['branch'] in active['staging']:
+                result = active['staging'][project['branch']]
+    return 'started' if active == True else 'stopped'
+
 def filter_get_images(project):
     return project['images'].keys()
 
@@ -208,6 +223,7 @@ class FilterModule(object):
             'project_get_service_networks'        : filter_get_service_networks,
             'project_get_service_published_ports' : filter_get_service_published_ports,
             'project_get_service_capabilities'    : filter_get_service_capabilities,
+            'project_get_service_state'           : filter_get_service_state,
             'project_get_images'                  : filter_get_images,
             'project_get_image_path'              : filter_get_image_path,
             'project_get_image_dockerfile'        : filter_get_image_dockerfile,

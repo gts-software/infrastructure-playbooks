@@ -28,11 +28,13 @@ project_services:
     image: 'project:app'
     depends_on:
       - db
+    active: true
   db:
     image: 'mongo:latest'
     volumes:
       - source: 'service:/db'
         destination: '/data/db'
+    active: true
 
 # services to be exposed via reverse proxy
 project_expose:
