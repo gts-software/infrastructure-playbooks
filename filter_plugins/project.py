@@ -176,7 +176,7 @@ def filter_get_service_state(project, service):
         elif project['mode'] == 'staging' and 'staging' in active:
             if isinstance(active['staging'], bool):
                 result = active['staging']
-            else project['branch'] in active['staging']:
+            elif project['branch'] in active['staging']:
                 result = active['staging'][project['branch']]
     return 'started' if active == True else 'stopped'
 
