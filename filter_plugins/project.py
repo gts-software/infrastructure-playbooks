@@ -178,7 +178,7 @@ def filter_get_service_state(project, service):
                 result = active['staging']
             elif project['branch'] in active['staging']:
                 result = active['staging'][project['branch']]
-    return 'started' if active == True else 'stopped'
+    return 'started' if result == True else 'stopped'
 
 def filter_get_images(project):
     return project['images'].keys()

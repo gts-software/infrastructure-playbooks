@@ -70,6 +70,9 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | base_name_host | Hostname to be applied | `alpha` |
 | base_name_domain | Domainname to be applied | `example.com` |
 | base_devops_email | Email address of the DevOps team | `devops@example.com` |
+| **Quay** | | |
+| quay_username | Quay.io username  | `example+deployment` |
+| quay_password | Quay.io password  | `nVKU7....5Qi4Y` |
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
@@ -123,17 +126,21 @@ project_name: simple
 project_images:
   app:
     dockerfile: Dockerfile
-    repository: quay.io/process_team/example-simple-app
+    repository: quay.io/some/example
 
 # domains used to serve the application
 project_domains:
-  staging: staging.simple-example.local
-  production: simple-example.local
+  staging:
+    develop: example-staging-develop.local
+    master: example-staging-master.local
+  production: example.local
 
 # hosts used to serve the application
 project_target:
-  staging: staging.server.example.local
-  production: production.server.example.local
+  staging:
+    develop: example-staging-server.local
+    master: example-staging-server.local
+  production: example-production-server.local
 
 # service composition (will be connected through their own network)
 project_services:
@@ -141,20 +148,22 @@ project_services:
     image: 'project:app'
     depends_on:
       - db
-    volumes: []
+    active: true
   db:
     image: 'mongo:latest'
     volumes:
-      - source: '/db'
+      - source: 'service:/db'
         destination: '/data/db'
+    active: true
 
 # services to be exposed via reverse proxy
 project_expose:
   web:
-    port: 80
-    domains:
-      - '@'
-      - www
+    - type: http
+      port: 3000
+      domains:
+        - '@'
+        - www
 
 # backups to be performed
 project_backup:
