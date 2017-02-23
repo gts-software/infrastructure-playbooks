@@ -59,7 +59,6 @@ def filter_get_service_labels(project, service):
     result = {
         'project.mode':    project['mode'],
         'project.branch':  project['branch'],
-        'project.version': project['version'],
         'project.group':   project['group'],
         'project.name':    project['name'],
         'project.service': service,
@@ -95,7 +94,6 @@ def filter_get_service_env(project, service):
     result = {
         'PROJECT_MODE':    project['mode'],
         'PROJECT_BRANCH':  project['branch'],
-        'PROJECT_VERSION': project['version'],
         'PROJECT_GROUP':   project['group'],
         'PROJECT_NAME':    project['name'],
     }
@@ -189,7 +187,6 @@ def filter_get_image_buildargs(project, image):
     result = {
         'PROJECT_MODE':    project['mode'],
         'PROJECT_BRANCH':  project['branch'],
-        'PROJECT_VERSION': project['version'],
         'PROJECT_GROUP':   project['group'],
         'PROJECT_NAME':    project['name'],
     }
