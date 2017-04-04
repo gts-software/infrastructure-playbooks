@@ -1,0 +1,68 @@
+- name: 'configure firewall : enable shorewall'
+  lineinfile:
+    dest: /etc/default/shorewall
+    regexp: "^startup="
+    line: "startup=1"
+  notify: restart shorewall
+
+- name: 'configure firewall : setup zones'
+  lineinfile:
+    dest: /etc/shorewall/zones
+    create: true
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  with_items:
+    - { line: 'fw firewall', regexp: '^fw\s+' }
+    - { line: 'inet ipv4', regexp: '^inet\s+' }
+  notify: restart shorewall
+
+- name: 'configure firewall : setup interfaces'
+  lineinfile:
+    dest: /etc/shorewall/interfaces
+    create: true
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  with_items:
+    - { line: 'inet {{ base_inet_if }} detect dhcp,routefilter,tcpflags,optional', regexp: '^inet\s+' }
+  notify: restart shorewall
+
+- name: 'configure firewall : setup policies'
+  lineinfile:
+    dest: /etc/shorewall/policy
+    create: true
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  with_items:
+    - { line: 'inet all DROP', regexp: '^inet\s+' }
+    - { line: 'fw all ACCEPT', regexp: '^fw\s+' }
+    - { line: 'all all REJECT', regexp: '^all\s+' }
+  notify: restart shorewall
+
+- name: 'configure firewall : setup rules'
+  lineinfile:
+    dest: /etc/shorewall/rules
+    create: true
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+    line: "ACCEPT all fw tcp 22"
+  notify: restart shorewall
+
+- name: 'configure firewall : setup snat'
+  copy:
+    content: ''
+    dest: /etc/shorewall/snat
+    force: false
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+  notify: restart shorewall

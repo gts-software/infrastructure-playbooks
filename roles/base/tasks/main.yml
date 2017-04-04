@@ -3,4 +3,5 @@
 - include: upgrade-system.yml
 - include: configure-kernel.yml
 - include: configure-names.yml
+- include: configure-firewall.yml
 - meta: flush_handlers

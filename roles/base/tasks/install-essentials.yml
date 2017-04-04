@@ -10,10 +10,7 @@
     - mc
     - curl
     - jq
-
-- name: 'install essentials : pip and virtualenv'
-  apt: name='{{item}}' state=latest
-  with_items:
+    - shorewall
     - python-pip
     - python-virtualenv
 
