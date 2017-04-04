@@ -1,4 +1,4 @@
-- name: 'configure kernel : tweaks for mongodb'
+- name: 'configure kernel : tweaks for database services'
   blockinfile:
     dest: /etc/sysfs.conf
     block: |

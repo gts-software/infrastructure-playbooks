@@ -1,5 +1,5 @@
-- name: deploy server
-  hosts: all
+- name: deploy production servers
+  hosts: production
   roles:
     - base
     - docker

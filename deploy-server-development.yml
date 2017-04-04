@@ -1,0 +1,8 @@
+- name: deploy development servers
+  hosts: development
+  roles:
+    - base
+    - docker
+    - logging
+    - backup
+    - gate
