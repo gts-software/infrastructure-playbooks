@@ -1,12 +1,9 @@
 - name: 'configure firewall : enable shorewall'
-  lineinfile:
-    dest: '/etc/default/{{ item[0] }}'
-    line: '{{ item[1].line }}'
-    regexp: '{{ item[1].regexp }}'
-  with_nested:
+  command: 'systemctl enable /lib/systemd/system/{{ item }}.service'
+  register: task_enable_shorewall_result
+  changed_when: "'Created symlink' in task_enable_shorewall_result.stderr"
+  with_items:
     - [ 'shorewall', 'shorewall6' ]
-    - - { line: 'startup=1', regexp: '^startup=' }
-      - { line: 'SAFESTOP=1', regexp: '^SAFESTOP=' }
   notify: restart shorewall
 
 - name: 'configure firewall : setup zones'
