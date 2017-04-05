@@ -1,5 +1,26 @@
+# install docker and docker-py
 - name: 'install : docker engine'
   apt: name='docker-engine' state=latest
 
 - name: 'install : docker-py'
   pip: name='docker-py' state=latest
+
+# configure docker
+- name: 'install : create systemd config directory'
+  file:
+    path: '/etc/systemd/system/docker.service.d'
+    state: directory
+    mode: 0755
+
+- name: 'install : create systemd config customization'
+  copy:
+    dest: '/etc/systemd/system/docker.service.d/custom.conf'
+    force: true
+    mode: 0644
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/usr/bin/dockerd --host=fd:// --iptables=false
+  notify: restart docker
+
+- meta: flush_handlers

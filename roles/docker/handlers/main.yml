@@ -1,0 +1,6 @@
+# restart docker
+- name: 'restart docker'
+  command: '{{ item }}'
+  with_items:
+    - systemctl daemon-reload
+    - service docker restart
