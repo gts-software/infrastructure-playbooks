@@ -63,6 +63,8 @@ def filter_get_service_labels(project, service):
         'project.name':    project['name'],
         'project.service': service,
     }
+    if project['services'][service]['image'].startswith('project:'):
+        result['project.version'] = project['version']
     if service in project['expose']:
         def mapdomain(domain):
             if isinstance(domain, dict):
@@ -91,12 +93,13 @@ def filter_get_service_labels(project, service):
     return result
 
 def filter_get_service_env(project, service):
-    result = {
-        'PROJECT_MODE':    project['mode'],
-        'PROJECT_BRANCH':  project['branch'],
-        'PROJECT_GROUP':   project['group'],
-        'PROJECT_NAME':    project['name'],
-    }
+    result = { }
+    if project['services'][service]['image'].startswith('project:'):
+        result['PROJECT_MODE'] = project['mode']
+        result['PROJECT_BRANCH'] = project['branch']
+        result['PROJECT_GROUP'] = project['group']
+        result['PROJECT_NAME'] = project['name']
+        result['PROJECT_VERSION'] = project['version']
     if 'environment' in project['services'][service]:
         for envKey in project['services'][service]['environment']:
             result[envKey] = project['services'][service]['environment'][envKey]
@@ -204,6 +207,7 @@ def filter_get_image_buildargs(project, image):
         'PROJECT_BRANCH':  project['branch'],
         'PROJECT_GROUP':   project['group'],
         'PROJECT_NAME':    project['name'],
+        'PROJECT_VERSION': project['version'],
     }
     return result
 
