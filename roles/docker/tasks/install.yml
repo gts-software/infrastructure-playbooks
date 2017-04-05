@@ -5,7 +5,7 @@
 - name: 'install : docker-py'
   pip: name='docker-py' state=latest
 
-# configure docker
+# configure docker startup
 - name: 'install : create systemd config directory'
   file:
     path: '/etc/systemd/system/docker.service.d'
@@ -20,7 +20,46 @@
     content: |
       [Service]
       ExecStart=
-      ExecStart=/usr/bin/dockerd --host=fd:// --iptables=false
+      ExecStart=/usr/bin/dockerd --host=fd://
   notify: restart docker
+
+- meta: flush_handlers
+
+# enable docker support in shorewall
+- name: 'install : enable docker support in shorewall'
+  lineinfile:
+    dest: '/etc/shorewall/shorewall.conf'
+    line: 'DOCKER=Yes'
+    regexp: '^DOCKER='
+  notify: restart shorewall
+
+- name: 'configure firewall : setup zones'
+  lineinfile:
+    dest: '/etc/shorewall/zones'
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  with_items:
+    - { line: 'dock -', regexp: '^dock\s+' }
+  notify: restart shorewall
+
+- name: 'configure firewall : setup interfaces'
+  lineinfile:
+    dest: '/etc/shorewall/interfaces'
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  with_items:
+    - { line: 'dock docker0 detect bridge,routeback=1', regexp: '^dock\s+' }
+  notify: restart shorewall
+
+- name: 'configure firewall : setup policies'
+  lineinfile:
+    dest: '/etc/shorewall/policy'
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+    insertbefore: '{{ item.before }}'
+  with_items:
+    - { line: 'dock all ACCEPT', regexp: '^dock\s+all\s+', before: '^all\s+all\s+' }
+    - { line: 'dock fw REJECT', regexp: '^dock\s+fw\s+', before: '^dock\s+all\s+' }
+  notify: restart shorewall
 
 - meta: flush_handlers

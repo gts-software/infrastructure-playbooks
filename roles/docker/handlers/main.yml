@@ -4,3 +4,8 @@
   with_items:
     - systemctl daemon-reload
     - service docker restart
+
+# restart shorewall
+- name: 'restart shorewall'
+  command: 'service {{ item }} restart'
+  with_items: [ 'shorewall', 'shorewall6' ]

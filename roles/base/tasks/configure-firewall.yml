@@ -6,6 +6,16 @@
     - [ 'shorewall', 'shorewall6' ]
   notify: restart shorewall
 
+- name: 'configure firewall : enable forwarding'
+  lineinfile:
+    dest: '/etc/{{ item[0] }}/{{ item[0] }}.conf'
+    line: '{{ item[1].line }}'
+    regexp: '{{ item[1].regexp }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - { line: 'IP_FORWARDING=Yes', regexp: '^IP_FORWARDING=' }
+  notify: restart shorewall
+
 - name: 'configure firewall : setup zones'
   lineinfile:
     dest: '/etc/{{ item[0] }}/zones'
