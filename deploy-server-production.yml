@@ -1,8 +1,0 @@
-- name: deploy production servers
-  hosts: production
-  roles:
-    - base
-    - docker
-    - logging
-    - backup
-    - gate

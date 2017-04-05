@@ -1,0 +1,10 @@
+- name: deploy docker servers
+  hosts:
+    - development
+    - production
+  roles:
+    - base
+    - docker
+    - logging
+    - backup
+    - gate
