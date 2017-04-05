@@ -5,12 +5,14 @@ ARG PROJECT_MODE=staging
 ARG PROJECT_BRANCH=develop
 ARG PROJECT_GROUP=unknown
 ARG PROJECT_NAME=unknown
+ARG PROJECT_VERSION=unknown
 
 # environment
 ENV PROJECT_MODE=staging
 ENV PROJECT_BRANCH=develop
 ENV PROJECT_GROUP=unknown
 ENV PROJECT_NAME=unknown
+ENV PROJECT_VERSION=unknown
 
 # upgrade system software
 RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" > /etc/apt/sources.list.d/debian-testing.list
