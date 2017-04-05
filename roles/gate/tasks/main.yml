@@ -36,16 +36,14 @@
     purge_networks: true
 
 # configure firewall
-- name: 'gate : allow http traffic'
+- name: 'gate : allow http and https traffic'
   lineinfile:
-    dest: /etc/shorewall/rules
-    line: "ACCEPT all fw tcp 80"
-  notify: restart shorewall
-
-- name: 'gate : allow https traffic'
-  lineinfile:
-    dest: /etc/shorewall/rules
-    line: "ACCEPT all fw tcp 443"
+    dest: '/etc/{{ item[0] }}/rules'
+    line: '{{ item[1] }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - 'ACCEPT all fw tcp 80'
+      - 'ACCEPT all fw tcp 443'
   notify: restart shorewall
 
 - meta: flush_handlers

@@ -11,6 +11,7 @@
     - curl
     - jq
     - shorewall
+    - shorewall6
     - python-pip
     - python-virtualenv
 

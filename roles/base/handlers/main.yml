@@ -8,4 +8,5 @@
 
 # restart shorewall
 - name: 'restart shorewall'
-  command: 'service shorewall restart'
+  command: 'service {{ item }} restart'
+  with_items: [ 'shorewall', 'shorewall6' ]

@@ -1,71 +1,69 @@
 - name: 'configure firewall : enable shorewall'
   lineinfile:
-    dest: /etc/default/shorewall
-    regexp: "^startup="
-    line: "startup=1"
+    dest: '/etc/default/{{ item[0] }}'
+    line: '{{ item[1].line }}'
+    regexp: '{{ item[1].regexp }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - { line: 'startup=1', regexp: '^startup=' }
+      - { line: 'SAFESTOP=1', regexp: '^SAFESTOP=' }
   notify: restart shorewall
 
 - name: 'configure firewall : setup zones'
   lineinfile:
-    dest: /etc/shorewall/zones
+    dest: '/etc/{{ item[0] }}/zones'
     create: true
     owner: 'root'
     group: 'root'
     mode: 0644
-    line: '{{ item.line }}'
-    regexp: '{{ item.regexp }}'
-  with_items:
-    - { line: 'fw firewall', regexp: '^fw\s+' }
-    - { line: 'inet ipv4', regexp: '^inet\s+' }
+    line: '{{ item[1].line }}'
+    regexp: '{{ item[1].regexp }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - { line: 'fw firewall', regexp: '^fw\s+' }
+      - { line: 'inet -', regexp: '^inet\s+' }
   notify: restart shorewall
 
 - name: 'configure firewall : setup interfaces'
   lineinfile:
-    dest: /etc/shorewall/interfaces
+    dest: '/etc/{{ item[0] }}/interfaces'
     create: true
     owner: 'root'
     group: 'root'
     mode: 0644
-    line: '{{ item.line }}'
-    regexp: '{{ item.regexp }}'
-  with_items:
-    - { line: 'inet {{ base_inet_if }} detect dhcp,routefilter,tcpflags,optional', regexp: '^inet\s+' }
+    line: '{{ item[1].line }}'
+    regexp: '{{ item[1].regexp }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - { line: 'inet {{ base_inet_if }} detect dhcp,tcpflags,optional', regexp: '^inet\s+' }
   notify: restart shorewall
 
 - name: 'configure firewall : setup policies'
   lineinfile:
-    dest: /etc/shorewall/policy
+    dest: '/etc/{{ item[0] }}/policy'
     create: true
     owner: 'root'
     group: 'root'
     mode: 0644
-    line: '{{ item.line }}'
-    regexp: '{{ item.regexp }}'
-  with_items:
-    - { line: 'inet all DROP', regexp: '^inet\s+' }
-    - { line: 'fw all ACCEPT', regexp: '^fw\s+' }
-    - { line: 'all all REJECT', regexp: '^all\s+' }
+    line: '{{ item[1].line }}'
+    regexp: '{{ item[1].regexp }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - { line: 'inet all DROP', regexp: '^inet\s+' }
+      - { line: 'fw all ACCEPT', regexp: '^fw\s+' }
+      - { line: 'all all REJECT', regexp: '^all\s+' }
   notify: restart shorewall
 
 - name: 'configure firewall : setup rules'
   lineinfile:
-    dest: /etc/shorewall/rules
+    dest: '/etc/{{ item[0] }}/rules'
     create: true
     owner: 'root'
     group: 'root'
     mode: 0644
-    line: '{{ item }}'
-  with_items:
-    - 'ACCEPT all fw tcp 22'
-    - 'Ping(ACCEPT) all fw'
-  notify: restart shorewall
-
-- name: 'configure firewall : setup snat'
-  copy:
-    content: ''
-    dest: /etc/shorewall/snat
-    force: false
-    owner: 'root'
-    group: 'root'
-    mode: 0644
+    line: '{{ item[1] }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - - 'ACCEPT all fw tcp 22'
+      - 'Ping(ACCEPT) all fw'
   notify: restart shorewall
