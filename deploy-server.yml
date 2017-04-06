@@ -1,0 +1,12 @@
+- name: deploy base
+  hosts: all
+  roles:
+    - base
+
+- name: deploy docker
+  hosts: docker
+  roles:
+    - docker
+    - logging
+    - backup
+    - gate

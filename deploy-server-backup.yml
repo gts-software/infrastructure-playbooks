@@ -1,4 +1,0 @@
-- name: deploy backup servers
-  hosts: backup
-  roles:
-    - base
