@@ -4,4 +4,5 @@
 - include: configure-kernel.yml
 - include: configure-names.yml
 - include: configure-firewall.yml
+- include: configure-exim.yml
 - meta: flush_handlers

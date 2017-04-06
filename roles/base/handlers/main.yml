@@ -10,3 +10,12 @@
 - name: 'restart shorewall'
   command: 'service {{ item }} restart'
   with_items: [ 'shorewall', 'shorewall6' ]
+
+# update exim configuration
+- name: 'update exim configuration'
+  command: 'update-exim4.conf'
+  notify: 'restart exim'
+
+# ... and restart exim
+- name: 'restart exim'
+  command: 'service exim4 restart'

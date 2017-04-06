@@ -1,0 +1,36 @@
+# update exim meta configuration to enable mail delivery
+- name: 'configure exim : update configuration'
+  lineinfile:
+    dest: /etc/exim4/update-exim4.conf.conf
+    regexp: "^{{ item.var }}="
+    line: "{{ item.var }}='{{ item.val }}'"
+  with_items:
+    - { var: dc_eximconfig_configtype, val: 'internet' }
+    - { var: dc_other_hostnames, val: '{{ base_name_host }}' }
+    - { var: dc_local_interfaces, val: '127.0.0.1 ; ::1' }
+    - { var: dc_readhost, val: '' }
+    - { var: dc_relay_domains, val: '' }
+    - { var: dc_minimaldns, val: 'false' }
+    - { var: dc_relay_nets, val: '' }
+    - { var: dc_smarthost, val: '' }
+    - { var: dc_use_split_config, val: 'false' }
+    - { var: dc_hide_mailname, val: '' }
+    - { var: dc_mailname_in_oh, val: 'true' }
+    - { var: dc_localdelivery, val: 'mail_spool' }
+  notify: update exim configuration
+
+# set mailname of host
+- name: 'configure exim : set mailname'
+  copy:
+    dest: '/etc/mailname'
+    content: '{{ base_name_host }}'
+    force: true
+  notify: update exim configuration
+
+# update root aliases to devops email address
+- name: 'configure exim : update root alias'
+  lineinfile:
+    dest: /etc/aliases
+    regexp: "^root:"
+    line: "root: {{ base_devops_email }}"
+  notify: update exim configuration
