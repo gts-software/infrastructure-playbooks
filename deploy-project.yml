@@ -11,3 +11,8 @@
   roles:
     - project-facts
     - project-deploy
+
+- name: 'prune docker'
+  hosts: '{{ project_target | project_get_target(project_mode, project_branch) }}'
+  roles:
+    - prune-docker

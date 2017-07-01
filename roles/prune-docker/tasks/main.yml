@@ -1,0 +1,8 @@
+- name: 'prune images'
+  shell: docker image prune --all --force
+
+- name: 'prune networks'
+  shell: docker network prune --force
+
+- name: 'prune volumes'
+  shell: docker volume prune --force

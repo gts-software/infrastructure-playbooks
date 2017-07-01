@@ -10,3 +10,8 @@
     - logging
     - backup
     - gate
+
+- name: 'prune docker'
+  hosts: docker
+  roles:
+    - prune-docker

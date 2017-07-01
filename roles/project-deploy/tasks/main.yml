@@ -2,7 +2,13 @@
   docker_network:
     name: '{{ project | project_get_network }}'
 
-- include: service.yml
+- include: service-pull.yml
+  with_items: '{{ project | project_get_services }}'
+  loop_control:
+    loop_var: service
+    pause: 1
+
+- include: service-deploy.yml
   with_items: '{{ project | project_get_services }}'
   loop_control:
     loop_var: service
