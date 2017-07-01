@@ -1,7 +1,7 @@
 - name: 'project deploy : image : {{ service }}'
   docker_image:
     name: '{{ project | project_get_service_image(service) }}'
-    force: true
+    force: '{{ docker_pull | default(false) | bool }}'
   async: 3600
   poll: 0
   register: pull_wait

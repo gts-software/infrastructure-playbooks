@@ -2,7 +2,6 @@
   docker_container:
     name:            '{{ project | project_get_service_name(service) }}'
     image:           '{{ project | project_get_service_image(service) }}'
-    pull:            '{{ docker_pull | default(false) | bool }}'
     env:             '{{ project | project_get_service_env(service) }}'
     labels:          '{{ project | project_get_service_labels(service) }}'
     volumes:         '{{ project | project_get_service_volumes(service) }}'
