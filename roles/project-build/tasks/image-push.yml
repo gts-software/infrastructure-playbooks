@@ -8,13 +8,13 @@
     loop_var: image
   async: 3600
   poll: 0
-  register: build_wait
+  register: push_wait
 
 - name: 'project build : push image : wait'
   async_status:
     jid: '{{ item.ansible_job_id }}'
-  with_items: '{{ build_wait.results }}'
-  register: build_results
-  until: build_results.finished
+  with_items: '{{ push_wait.results }}'
+  register: push_results
+  until: push_results.finished
   retries: 360
   delay: 10
