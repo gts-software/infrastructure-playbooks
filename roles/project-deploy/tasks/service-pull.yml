@@ -1,4 +1,4 @@
-- name: 'project deploy : image : {{ service }}'
+- name: 'project deploy : pull service image : {{ service }}'
   docker_image:
     name: '{{ project | project_get_service_image(service) }}'
     force: '{{ docker_pull | default(false) | bool }}'
@@ -6,7 +6,7 @@
   poll: 0
   register: pull_wait
 
-- name: 'project deploy : image : {{ service }} : wait'
+- name: 'project deploy : pull service image : {{ service }} : wait'
   async_status:
     jid: '{{ pull_wait.ansible_job_id }}'
   register: pull_result

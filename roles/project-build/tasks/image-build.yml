@@ -1,0 +1,23 @@
+- name: 'project build : build image'
+  docker_image:
+    path: '{{ project | project_get_image_path(image, project_source) }}'
+    dockerfile: '{{ project | project_get_image_dockerfile(image, project_source) }}'
+    name: '{{ project | project_get_image_repository(image) }}'
+    tag: '{{ project | project_get_image_tag(image) }}'
+    buildargs: '{{ project | project_get_image_buildargs(image) }}'
+    nocache: true
+  with_items: '{{ project | project_get_images }}'
+  loop_control:
+    loop_var: image
+  async: 3600
+  poll: 0
+  register: build_wait
+
+- name: 'project build : build image : wait'
+  async_status:
+    jid: '{{ item.ansible_job_id }}'
+  with_items: '{{ build_wait.results }}'
+  register: build_results
+  until: build_results.finished
+  retries: 360
+  delay: 10
