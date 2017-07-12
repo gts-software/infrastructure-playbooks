@@ -15,6 +15,7 @@
     - python-pip
     - python-virtualenv
     - exim4
+    - byobu
 
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
