@@ -4,3 +4,9 @@
     block: |
       kernel/mm/transparent_hugepage/enabled = never
   notify: reboot system
+
+- name: 'configure kernel : enable path mtu detection'
+  sysctl:
+    name: net.ipv4.tcp_mtu_probing
+    value: 1
+    sysctl_file: /etc/sysctl.d/local.conf
