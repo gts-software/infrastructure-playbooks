@@ -135,6 +135,9 @@ def filter_get_service_networks(project, service):
                 break
     return result
 
+def filter_get_service_exposed_ports(project, service):
+    return project['services'][service]['exposed_ports'] if 'exposed_ports' in project['services'][service] else []
+
 def filter_get_service_published_ports(project, service):
     result = [ ]
     if service in project['expose']:
@@ -225,6 +228,7 @@ class FilterModule(object):
             'project_get_service_env'             : filter_get_service_env,
             'project_get_service_volumes'         : filter_get_service_volumes,
             'project_get_service_networks'        : filter_get_service_networks,
+            'project_get_service_exposed_ports'   : filter_get_service_exposed_ports,
             'project_get_service_published_ports' : filter_get_service_published_ports,
             'project_get_service_capabilities'    : filter_get_service_capabilities,
             'project_get_service_state'           : filter_get_service_state,

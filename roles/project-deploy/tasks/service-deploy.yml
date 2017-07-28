@@ -7,6 +7,7 @@
     volumes:         '{{ project | project_get_service_volumes(service) }}'
     networks:        '{{ project | project_get_service_networks(service) }}'
     purge_networks:  true
+    exposed_ports:   '{{ project | project_get_service_exposed_ports(service) }}'
     published_ports: '{{ project | project_get_service_published_ports(service) }}'
     capabilities:    '{{ project | project_get_service_capabilities(service) }}'
     restart_policy:  'on-failure'
