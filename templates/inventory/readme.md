@@ -6,4 +6,3 @@ Have a look at the [infrastructure-playbooks](https://github.com/core-process/in
 
 Please have a look at the following sister projects too:
 - [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation)
-- [docker-backup](https://github.com/core-process/docker-backup)

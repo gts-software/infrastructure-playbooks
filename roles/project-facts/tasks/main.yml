@@ -10,4 +10,3 @@
       domains:  '{{ project_domains }}'
       services: '{{ project_services }}'
       expose:   '{{ project_expose | default({}) }}'
-      backup:   '{{ project_backup | default({}) }}'

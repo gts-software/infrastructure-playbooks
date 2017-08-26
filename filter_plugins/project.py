@@ -84,12 +84,6 @@ def filter_get_service_labels(project, service):
                 result['traefik.frontend.rule'] = 'Host:' + ','.join( filter( lambda x: x is not None, map( mapdomain, item['domains'] ) ) )
                 result['traefik.port'] = str(item['port'])
                 result['traefik.docker.network'] = 'core_gate'
-    if service in project['backup']:
-        def backupdef(id):
-            result = { 'id': id }
-            result.update(project['backup'][service][id])
-            return result
-        result['backup'] = yaml.safe_dump(map(backupdef , project['backup'][service].keys()), default_flow_style=True)
     return result
 
 def filter_get_service_env(project, service):
@@ -127,11 +121,6 @@ def filter_get_service_networks(project, service):
         for item in project['expose'][service]:
             if item['type'] == 'http':
                 result.append({ 'name': 'core_gate' })
-                break
-    if service in project['backup']:
-        for id in project['backup'][service]:
-            if project['backup'][service][id]['type'] != 'mount':
-                result.append({ 'name': 'core_backup' })
                 break
     return result
 

@@ -5,7 +5,6 @@ This project provides a set of Ansible playbooks for a Docker-centric world. Use
 Please have a look at the following sister projects too:
 - [infrastructure-playbooks/templates/inventory](https://github.com/core-process/infrastructure-playbooks/tree/master/templates/inventory)
 - [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation)
-- [docker-backup](https://github.com/core-process/docker-backup)
 
 ## Setup
 
@@ -85,7 +84,6 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | backup_storage_secret_key | Amazon AWS secret access key | `HvbMb9v8dW...` |
 
 Please have a look at the following projects for further information and instructions:
-- [docker-backup](https://github.com/core-process/docker-backup): This service provides backup mechanisms for Docker containers. Container labels provide all container related backup configuration.
 - [logspout-loggly](https://github.com/iamatypeofwalrus/logspout-loggly): This is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to Loggly.
 
 ## Manage a Cluster
@@ -164,11 +162,4 @@ project_expose:
       domains:
         - '@'
         - www
-
-# backups to be performed
-project_backup:
-  db:
-    dbdata:
-      type: mongodb
-      port: 27017
 ```

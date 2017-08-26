@@ -44,10 +44,3 @@ project_expose:
       domains:
         - '@'
         - www
-
-# backups to be performed
-project_backup:
-  db:
-    dbdata:
-      type: mongodb
-      port: 27017
