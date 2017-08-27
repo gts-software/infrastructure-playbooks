@@ -1,0 +1,20 @@
+- name: 'enable noop scheduler'
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet elevator=noop"'
+  notify: update grub
+
+- name: 'adjust vm.dirty_ratio = 10'
+  sysctl:
+    name: vm.dirty_ratio
+    value: 10
+    sysctl_file: /etc/sysctl.d/local.conf
+
+- name: 'adjust vm.dirty_background_ratio = 5'
+  sysctl:
+    name: vm.dirty_background_ratio
+    value: 5
+    sysctl_file: /etc/sysctl.d/local.conf
+
+- meta: flush_handlers

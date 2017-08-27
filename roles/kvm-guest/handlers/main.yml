@@ -1,0 +1,12 @@
+# update grub
+- name: update grub
+  command: update-grub
+  notify: 'reboot system'
+
+# reboot system
+- name: 'reboot system'
+  command: bash -c "screen -d -m bash -c 'service ssh stop; sleep 7; shutdown --reboot now'; sleep 1"
+  notify: 'reboot system : wait for reboot'
+
+- name: 'reboot system : wait for reboot'
+  local_action: wait_for host="{{ ansible_host }}" port=22 delay=14
