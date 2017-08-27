@@ -21,9 +21,7 @@
       [Service]
       ExecStart=
       ExecStart=/usr/bin/dockerd --host=fd://
-  notify: restart docker
-
-- meta: flush_handlers
+  notify: reboot system
 
 # enable docker support in shorewall
 - name: 'install : enable docker support in shorewall'
@@ -31,7 +29,7 @@
     dest: '/etc/shorewall/shorewall.conf'
     line: 'DOCKER=Yes'
     regexp: '^DOCKER='
-  notify: restart shorewall
+  notify: reboot system
 
 - name: 'configure firewall : setup zones'
   lineinfile:
@@ -40,7 +38,7 @@
     regexp: '{{ item.regexp }}'
   with_items:
     - { line: 'dock -', regexp: '^dock\s+' }
-  notify: restart shorewall
+  notify: reboot system
 
 - name: 'configure firewall : setup interfaces'
   lineinfile:
@@ -49,7 +47,7 @@
     regexp: '{{ item.regexp }}'
   with_items:
     - { line: 'dock docker0 detect bridge,routeback=1', regexp: '^dock\s+' }
-  notify: restart shorewall
+  notify: reboot system
 
 - name: 'configure firewall : setup policies'
   lineinfile:
@@ -60,6 +58,6 @@
   with_items:
     - { line: 'dock all ACCEPT', regexp: '^dock\s+all\s+', before: '^all\s+all\s+' }
     - { line: 'dock fw REJECT', regexp: '^dock\s+fw\s+', before: '^dock\s+all\s+' }
-  notify: restart shorewall
+  notify: reboot system
 
 - meta: flush_handlers
