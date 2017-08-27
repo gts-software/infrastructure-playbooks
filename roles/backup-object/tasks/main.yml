@@ -1,0 +1,15 @@
+- name: 'deploy rdiff-backup wrapper'
+  copy:
+    src: rdiff-backup-server-with-snapshot.sh
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: 0755
+
+- name: 'configure authorized keys'
+  authorized_key:
+    user: root
+    key: '{{ backup_authorized_keys | join("\n") }}'
+    key_options: 'command="/usr/local/bin/rdiff-backup-server-with-snapshot.sh",from="{{ groups['backup'] | map('extract', hostvars, ['ansible_host']) | join(',') }}",restrict'
+    exclusive: false
+    manage_dir: false

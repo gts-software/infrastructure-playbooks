@@ -3,15 +3,21 @@
   roles:
     - base
 
-- name: deploy docker
-  hosts: docker
+- name: deploy operations
+  hosts: operations
   roles:
+    - backup-object
     - docker
     - logging
-    - backup
     - gate
+    - deployment-target
 
-- name: 'prune docker'
-  hosts: docker
+- name: deploy operations : prune docker
+  hosts: operations
   roles:
     - prune-docker
+
+- name: deploy backup
+  hosts: backup
+  roles:
+    - backup-service

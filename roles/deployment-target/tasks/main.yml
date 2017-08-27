@@ -1,0 +1,6 @@
+- name: 'configure authorized keys'
+  authorized_key:
+    user: root
+    key: '{{ deployment_authorized_keys | join("\n") }}'
+    exclusive: false
+    manage_dir: false

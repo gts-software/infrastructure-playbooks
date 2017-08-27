@@ -16,6 +16,7 @@
     - python-virtualenv
     - exim4
     - byobu
+    - rdiff-backup
 
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
