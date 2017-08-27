@@ -4,6 +4,14 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 # create snapshot
 (
+  if ! mkdir -p --mode=0700 /mnt/root-snapshot; then
+  	exit 1
+  fi
+
+  if [ "$(ls -A /mnt/root-snapshot)" ]; then
+  	exit 1
+  fi
+
   if ! lvcreate --extents 100%FREE --snapshot --name root-snapshot /dev/main/root; then
   	exit 1
   fi
