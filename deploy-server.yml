@@ -13,7 +13,7 @@
     - gate
     - deployment-target
 
-- name: deploy operations : prune docker
+- name: 'deploy operations : prune docker'
   hosts: operations
   roles:
     - prune-docker

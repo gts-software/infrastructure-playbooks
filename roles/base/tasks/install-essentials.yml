@@ -10,6 +10,7 @@
     - mc
     - curl
     - jq
+    - net-tools
     - shorewall
     - shorewall6
     - python-pip

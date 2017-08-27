@@ -1,8 +1,11 @@
 - name: 'prune images'
   shell: docker image prune --all --force
+  changed_when: false
 
 - name: 'prune networks'
   shell: docker network prune --force
+  changed_when: false
 
 - name: 'prune volumes'
   shell: docker volume prune --force
+  changed_when: false
