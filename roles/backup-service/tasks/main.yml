@@ -11,8 +11,8 @@
     owner: root
     group: root
     mode: 0755
-    recurse: true
   with_items:
+    - /backup
     - /backup/scripts
     - /backup/config
     - /backup/repos
@@ -34,7 +34,7 @@
 
 - name: 'write configuration : object list'
   copy:
-    content: '{{ groups[''operations''] | map(''extract'', hostvars, [''ansible_host'']) | join("\n") }}'
+    content: "{{ groups['operations'] | map('extract', hostvars, ['ansible_host']) | join('\n') }}"
     dest: /backup/config/objects.list
     owner: root
     group: root
@@ -60,7 +60,7 @@
 
 - fetch:
     src: /root/.ssh/id_rsa.pub
-    dest: '{{ inventory_dir }}/keys/backup-{{ inventory_hostname }}.pub'
+    dest: '{{ inventory_dir }}/keys/backup_{{ inventory_hostname }}.pub'
     flat: yes
 
 - name: 'setup cronjob : backup service'

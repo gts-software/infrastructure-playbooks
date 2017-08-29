@@ -4,6 +4,11 @@
     - base
     - kvm-guest
 
+- name: deploy backup
+  hosts: backup
+  roles:
+    - backup-service
+
 - name: deploy operations
   hosts: operations
   roles:
@@ -17,8 +22,3 @@
   hosts: operations
   roles:
     - prune-docker
-
-- name: deploy backup
-  hosts: backup
-  roles:
-    - backup-service
