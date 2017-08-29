@@ -1,0 +1,62 @@
+- name: 'install rdiff-backup and duplicity'
+  apt: name='{{item}}' state=latest
+  with_items:
+    - rdiff-backup
+    - duplicity
+
+- name: 'create directories'
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: true
+  with_items:
+    - /backup/scripts
+    - /backup/config
+    - /backup/repos
+    - /backup/locks
+
+- name: 'deploy scripts'
+  copy:
+    src: '{{ item }}'
+    dest: /backup/scripts
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - backup.sh
+    - backup-object.sh
+    - backup-object-main.sh
+    - backup-object-rdiff-backup.sh
+    - backup-object-duplicity.sh
+
+- name: 'write configuration : object list'
+  copy:
+    content: '{{ groups[''operations''] | map(''extract'', hostvars, [''ansible_host'']) | join("\n") }}'
+    dest: /backup/config/objects.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'write configuration : shell variables'
+  copy:
+    content: |
+      AWS_KEY_ID="{{ backup_aws_key_id }}"
+      AWS_KEY_SECRET="{{ backup_aws_key_secret }}"
+      AWS_S3_URL="{{ backup_aws_s3_url }}"
+      FULL_IF_OLDER_THAN="{{ backup_full_if_older_than }}"
+      REMOVE_OLDER_THAN="{{ backup_remove_older_than }}"
+    dest: /backup/config/vars.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'setup cronjob : backup service'
+  cron:
+    name: backup-service
+    cron_file: backup-service
+    minute: 0
+    user: root
+    job: '/backup/scripts/backup.sh'
