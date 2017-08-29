@@ -60,7 +60,7 @@
 
 - fetch:
     src: /root/.ssh/id_rsa.pub
-    dest: {{ inventory_dir }}/keys/backup-{{ inventory_hostname }}.pub
+    dest: '{{ inventory_dir }}/keys/backup-{{ inventory_hostname }}.pub'
     flat: yes
 
 - name: 'setup cronjob : backup service'
