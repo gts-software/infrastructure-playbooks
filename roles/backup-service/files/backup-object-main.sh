@@ -26,3 +26,6 @@ then
   echo ">> ERROR: duplicity failed for $BACKUP_OBJECT"
   exit $EXIT_CODE
 fi
+
+# done
+echo ">> INFO: completed backup for $BACKUP_OBJECT"
