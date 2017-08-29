@@ -1,7 +1,6 @@
 # backup
-backup_interval: '0 3 * * *' # every day at 3 am (cron time format)
-backup_full_every: '1M' # 1 month (see duplicity time formats)
-backup_remove_older_than: '1Y' # 1 year
-backup_storage_url: 's3://s3-eu-central-1.amazonaws.com/some-bucket'
-backup_storage_key_id: '7M1VGFL6T10A8YURMQAH'
-backup_storage_secret_key: 'HvbMb9v8dWXKus0GZQTVT4kheBgSz7er0fde5svx'
+backup_full_if_older_than: '1M' # 1 month (used with duplicity)
+backup_remove_older_than: '1Y' # 1 year (used with rdiff-backup and duplicity)
+backup_aws_s3_url: 's3://s3-eu-central-1.amazonaws.com/some-bucket'
+backup_aws_key_id: '7M1VGFL6T10A8YURMQAH'
+backup_aws_key_secret: 'HvbMb9v8dWXKus0GZQTVT4kheBgSz7er0fde5svx'
