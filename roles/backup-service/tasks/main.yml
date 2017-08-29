@@ -1,8 +1,14 @@
-- name: 'install rdiff-backup and duplicity'
+- name: 'install required backup software'
   apt: name='{{item}}' state=latest
   with_items:
     - rdiff-backup
     - duplicity
+    - parallel
+
+- name: 'install boto for duplicity'
+  pip: name='{{item}}' state=latest
+  with_items:
+    - boto
 
 - name: 'create directories'
   file:
@@ -58,7 +64,8 @@
   args:
     creates: /root/.ssh/id_rsa
 
-- fetch:
+- name: 'fetch ssh key'
+  fetch:
     src: /root/.ssh/id_rsa.pub
     dest: '{{ inventory_dir }}/keys/backup_{{ inventory_hostname }}.pub'
     flat: yes
@@ -70,3 +77,4 @@
     minute: 0
     user: root
     job: '/backup/scripts/backup.sh'
+    disabled: true
