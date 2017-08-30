@@ -77,4 +77,3 @@
     minute: 0
     user: root
     job: '/backup/scripts/backup.sh'
-    disabled: true
