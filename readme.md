@@ -2,7 +2,7 @@
 
 This project provides a set of Ansible playbooks for a Docker-centric world. Use them to set up single servers, entire clusters, and projects on top of it. It supports logging and backup out of the box.
 
-Please have a look at the following sister projects too:
+Please have a look at the following projects too:
 - [infrastructure-playbooks/templates/inventory](https://github.com/core-process/infrastructure-playbooks/tree/master/templates/inventory)
 - [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation)
 
@@ -17,7 +17,7 @@ sudo apt-get update
 sudo apt-get install git curl unzip openssh-client sshpass ansible
 ```
 
-Clone the latest playbooks:
+Clone or pull the latest playbooks:
 
 ```sh
 mkdir workspace && cd workspace
@@ -26,23 +26,7 @@ git clone https://github.com/core-process/infrastructure-playbooks.git
 
 ## Manage the Inventory
 
-Initialize your inventory:
-
-```sh
-mkdir infrastructure-inventory && cd infrastructure-inventory
-../infrastructure-playbooks/inventory-init.sh
-```
-
-Adjust or remove the example hosts of the newly generated inventory. Setup new hosts either manually or by utilizing the [linux-unattended-installation](https://github.com/core-process/linux-unattended-installation) project.
-
-Add hosts to the inventory with the help of the `inventory-add.sh` script:
-
-```sh
-# Usage: inventory-add.sh <host name> <host ip or dns> <current root password> [<new root password>|auto]
-# - If you provide a new root password, we will change the password on the host automatically.
-# - If you provide the keyword 'auto', we will generate a strong password automatically.
-../infrastructure-playbooks/inventory-add.sh gamma gamma.example.com root-password auto
-```
+Initialize your Ansible inventory by using the following template: [infrastructure-playbooks/templates/inventory](https://github.com/core-process/infrastructure-playbooks/tree/master/templates/inventory)
 
 ## Manage a Server
 
@@ -64,24 +48,26 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | **Ansible** | | |
 | ansible_host | The IP or DNS of the host to connect to  | `alpha.example.com` |
 | ansible_user | The default ssh user name to use | `root` |
-| ansible_password | The ssh password to use | `q9ShgTbqn...` |
 | **Base** | | |
 | base_name_host | Hostname to be applied | `alpha` |
 | base_name_domain | Domainname to be applied | `example.com` |
 | base_devops_email | Email address of the DevOps team | `devops@example.com` |
+| base_inet_if | The internet network interface | `ens3` |
+| **Remote Access** | | |
+| base_authorized_keys | Authorized user keys for root access | `- ssh-rsa AAAAB3N...` |
+| backup_authorized_keys | Authorized keys for backup procedure access | `- ssh-rsa AAAAB3N...` |
+| deployment_authorized_keys | Authorized keys for deployment access | `- ssh-rsa AAAAB3N...` |
 | **Quay** | | |
 | quay_username | Quay.io username  | `example+deployment` |
 | quay_password | Quay.io password  | `nVKU7....5Qi4Y` |
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
-| backup_interval | A cron string describing the backup interval | `0 3 * * *` |
-| backup_full_every | Perform a full backup if the latest full backup is older than the given time | `1M` |
+| backup_full_if_older_than | Perform a full backup if the latest full backup is older than the given time | `1M` |
 | backup_remove_older_than | Delete all backups older than the given time | `1Y` |
-| backup_storage_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
-| backup_storage_password | A password for accessing the storage | `2r93ur...` |
-| backup_storage_key_id | Amazon AWS access key id | `7M1VGFL6...` |
-| backup_storage_secret_key | Amazon AWS secret access key | `HvbMb9v8dW...` |
+| backup_aws_s3_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
+| backup_aws_key_id | Amazon AWS access key id | `7M1VGFL6...` |
+| backup_aws_key_secret | Amazon AWS access key secret | `HvbMb9v8dW...` |
 
 Please have a look at the following projects for further information and instructions:
 - [logspout-loggly](https://github.com/iamatypeofwalrus/logspout-loggly): This is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to Loggly.
@@ -96,21 +82,29 @@ Run the following command to build a project (builds on localhost):
 
 ```sh
 ansible-playbook ../infrastructure-playbooks/build-project.yml \
+  -e docker_push=true \
   -e project_source=`pwd` \
   -e project_mode=staging \
   -e project_branch=develop \
   -e project_version=1.0.1 \
   -e '@project.yml'
+
+# For convenience we provided a wrapper script. Use the following for more:
+../infrastructure-playbooks/build-project.sh -?
 ```
 
 Run the following command to deploy a project (deploys to project target):
 
 ```sh
 ansible-playbook ../infrastructure-playbooks/deploy-project.yml \
+  -e docker_pull=true \
   -e project_mode=staging \
   -e project_branch=develop \
   -e project_version=1.0.1 \
   -e '@project.yml'
+
+# For convenience we provided a wrapper script. Use the following for more:
+../infrastructure-playbooks/deploy-project.sh -?
 ```
 
 Define your project as follows:
