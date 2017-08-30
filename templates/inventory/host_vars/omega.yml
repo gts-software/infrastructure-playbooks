@@ -1,7 +1,7 @@
 # ansible
 ansible_host: omega.example.com
 ansible_user: root
-ansible_password: hDTgq2PWekF02TvaGSlbglPO9iXYFTqcXdOgRKf3tzlYTY92FT5dfML7SsmmZjbx
 
 # base
+base_inet_if: ens3
 base_name_host: omega
