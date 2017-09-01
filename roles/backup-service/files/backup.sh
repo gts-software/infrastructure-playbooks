@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-# run 3 backups in parallel
-echo ">> INFO: backup objects in parallel"
-parallel --will-cite --jobs 3 /backup/scripts/backup-object.sh {} < /backup/config/objects.list
+# run up to 3 backups in parallel
+NOW=$(date +%Y%m%d-%H%M%S)
+parallel --will-cite --jobs 3 /backup/scripts/backup-object.sh {} '&>' /backup/logs/{}-$NOW.log < /backup/config/objects.list

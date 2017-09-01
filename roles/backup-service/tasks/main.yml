@@ -23,6 +23,7 @@
     - /backup/config
     - /backup/repos
     - /backup/locks
+    - /backup/logs
 
 - name: 'deploy scripts'
   copy:
