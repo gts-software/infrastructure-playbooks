@@ -38,6 +38,7 @@
     - backup-object-main.sh
     - backup-object-rdiff-backup.sh
     - backup-object-duplicity.sh
+    - backup-status.py
 
 - name: 'write configuration : object list'
   copy:

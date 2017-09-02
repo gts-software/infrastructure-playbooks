@@ -5,6 +5,7 @@ import csv
 import re
 from datetime import timedelta, datetime
 import json
+import sys
 
 def status():
     # get joblog file paths
@@ -47,25 +48,25 @@ def status():
             ok = False
             continue
         # check if we have a bad exit code
-        if details[object].exitcode != 0:
+        if details[object]["exitcode"] != 0:
             summary[object] = {
                 "ok": False,
                 "message": "backup failed (unknown error)"
             }
             ok = False
-            if details[object].exitcode == 2:
+            if details[object]["exitcode"] == 2:
                 summary[object]["message"] = "backup failed (rdiff-backup failed)"
-            if details[object].exitcode == 3:
+            if details[object]["exitcode"] == 3:
                 summary[object]["message"] = "backup failed (duplicity failed)"
-            if details[object].exitcode == 4:
+            if details[object]["exitcode"] == 4:
                 summary[object]["message"] = "backup failed (cleanup rdiff-backup failed)"
-            if details[object].exitcode == 5:
+            if details[object]["exitcode"] == 5:
                 summary[object]["message"] = "backup failed (cleanup duplicity failed)"
-            if details[object].exitcode == 99:
+            if details[object]["exitcode"] == 99:
                 summary[object]["message"] = "backup failed (blocked by parallel running backup process)"
             continue
         # check if we have a bad signal code
-        if details[object].sigcode != 0:
+        if details[object]["sigcode"] != 0:
             summary[object] = {
                 "ok": False,
                 "message": "backup failed (signal caught)"
@@ -73,7 +74,7 @@ def status():
             ok = False
             continue
         # check if last backup is too old
-        if details[object].timestamp < datetime.utcnow() + timedelta(hours = -2):
+        if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -2):
             summary[object] = {
                 "ok": False,
                 "message": "backup is too old"
@@ -88,4 +89,6 @@ def status():
     }
 
 if __name__ == "__main__":
-    print json.dumps(status(), sort_keys=True, indent=2)
+    current = status()
+    print json.dumps(current, sort_keys=True, indent=2, default=str)
+    sys.exit(0 if current["ok"] else 1)
