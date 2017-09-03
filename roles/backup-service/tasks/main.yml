@@ -4,6 +4,7 @@
     - rdiff-backup
     - duplicity
     - parallel
+    - apache2
 
 - name: 'install boto for duplicity'
   pip: name='{{item}}' state=latest
@@ -24,6 +25,8 @@
     - /backup/repos
     - /backup/locks
     - /backup/logs
+    - /backup/monitoring
+    - /backup/monitoring/webroot
 
 - name: 'deploy scripts'
   copy:
@@ -79,3 +82,79 @@
     minute: 0
     user: root
     job: '/backup/scripts/backup.sh'
+
+# configure firewall
+- name: 'allow http traffic for monitoring'
+  lineinfile:
+    dest: '/etc/{{ item[0] }}/rules'
+    line: '{{ item[1] }}'
+  with_nested:
+    - [ 'shorewall', 'shorewall6' ]
+    - [ 'ACCEPT all fw tcp 80' ]
+  notify: restart shorewall
+
+- meta: flush_handlers
+
+# configure apache
+- name: 'detect enabled apache modules'
+  command: 'apachectl -M'
+  changed_when: false
+  register: enabled_apache_modules
+
+- name: 'enable apache cgi'
+  command: 'a2enmod cgi'
+  when: '"cgid_module" not in enabled_apache_modules.stdout'
+  notify: restart apache
+
+- name: 'remove default apache vhost'
+  file:
+    state: absent
+    path: '/etc/apache2/sites-enabled/000-default.conf'
+  notify: restart apache
+
+- name: 'vhost configuration'
+  copy:
+    content: |
+      # enable cgi for python scripts
+      <Directory "/backup/monitoring/webroot">
+        AddHandler cgi-script .py
+        DirectoryIndex index.py
+        Options ExecCGI
+        Require all granted
+      </Directory>
+      # serve monitoring script
+      <VirtualHost *:80>
+        ServerAdmin {{ base_devops_email }}
+        DocumentRoot /backup/monitoring/webroot
+      </VirtualHost>
+    dest: /backup/monitoring/vhost.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+
+- name: 'vhost configuration : enable'
+  file:
+    src: /backup/monitoring/vhost.conf
+    dest: /etc/apache2/sites-enabled/000-monitoring.conf
+    owner: root
+    group: root
+    state: link
+  notify: restart apache
+
+- name: 'monitoring handler'
+  copy:
+    content: |
+      #!/usr/bin/env python
+      import imp
+      mod = imp.load_source('backupstatus', '/backup/scripts/backup-status.py')
+      print "Content-Type: text/plain;charset=utf-8"
+      print
+      print "OK" if mod.status()["ok"] else "ERROR"
+    dest: /backup/monitoring/webroot/index.py
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart apache
+
+- meta: flush_handlers
