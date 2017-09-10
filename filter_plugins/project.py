@@ -131,7 +131,8 @@ def filter_get_service_published_ports(project, service):
     result = [ ]
     if service in project['expose']:
         for item in project['expose'][service]:
-            if item['type'] == 'tcp':
+            if item['type'] == 'tcp' or item['type'] == 'udp':
+                pext = '' if item['type'] == 'tcp' else '/udp'
                 cport = str(item['port'])
                 hport = None
                 if 'hostport' in item:
@@ -146,12 +147,12 @@ def filter_get_service_published_ports(project, service):
                     if len(cport) != len(hport) or len(cport) > 2:
                         raise ValueError('invalid port specification')
                     if len(cport) == 1:
-                        result.append(hport[0] + ':' + cport[0])
+                        result.append(hport[0] + ':' + cport[0] + pext)
                     else:
                         if (int(cport[1]) - int(cport[0])) != (int(hport[1]) - int(hport[0])):
                             raise ValueError('invalid port specification')
                         for i in range(0, int(cport[1]) - int(cport[0]) + 2):
-                            result.append(str(int(hport[0]) + i) + ':' + str(int(cport[0]) + i))
+                            result.append(str(int(hport[0]) + i) + ':' + str(int(cport[0]) + i) + pext)
     return result
 
 
