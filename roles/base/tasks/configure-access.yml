@@ -1,6 +1,6 @@
 - name: 'configure access : ssh keys'
   authorized_key:
     user: root
-    key: '{{ base_authorized_keys | join("\n") }}'
+    key: "{{ base_authorized_keys | join('\n') }}"
     exclusive: true
     manage_dir: true
