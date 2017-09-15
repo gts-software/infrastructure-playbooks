@@ -1,13 +1,15 @@
 #!/bin/bash
 set -e
 
-# run up to 3 backups in parallel
+# run up to 3 backups in parallel and collect number of backup jobs failed
 export BACKUP_TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-if ! parallel --will-cite --keep-order --jobs 3 --joblog /backup/logs/joblog-$BACKUP_TIMESTAMP.log /backup/scripts/backup-object.sh {} '&>' /backup/logs/{}-$BACKUP_TIMESTAMP.log < /backup/config/objects.list;
-then
-  # collect number of backup jobs failed
-  JOBS_FAILED_COUNT=$?
 
+JOBS_FAILED_COUNT="0"
+parallel --will-cite --keep-order --jobs 3 --joblog /backup/logs/joblog-$BACKUP_TIMESTAMP.log /backup/scripts/backup-object.sh {} '&>' /backup/logs/{}-$BACKUP_TIMESTAMP.log < /backup/config/objects.list || JOBS_FAILED_COUNT="$?"
+
+# validate result
+if [ "$JOBS_FAILED_COUNT" != "0" ];
+then
   # print warning
   echo "BACKUP FAILED: $JOBS_FAILED_COUNT backup(s) could not be completed!"
   echo
