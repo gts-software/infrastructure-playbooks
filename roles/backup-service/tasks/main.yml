@@ -57,8 +57,9 @@
       AWS_KEY_ID="{{ backup_aws_key_id }}"
       AWS_KEY_SECRET="{{ backup_aws_key_secret }}"
       AWS_S3_URL="{{ backup_aws_s3_url }}"
-      FULL_IF_OLDER_THAN="{{ backup_full_if_older_than }}"
-      REMOVE_OLDER_THAN="{{ backup_remove_older_than }}"
+      REMOTE_FULL_IF_OLDER_THAN="{{ backup_remote_full_if_older_than }}"
+      REMOTE_REMOVE_OLDER_THAN="{{ backup_remote_remove_older_than }}"
+      LOCAL_REMOVE_OLDER_THAN="{{ backup_local_remove_older_than }}"
     dest: /backup/config/vars.sh
     owner: root
     group: root

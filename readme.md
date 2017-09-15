@@ -63,8 +63,9 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
-| backup_full_if_older_than | Perform a full backup if the latest full backup is older than the given time | `1M` |
-| backup_remove_older_than | Delete all backups older than the given time | `1Y` |
+| backup_remote_full_if_older_than | Perform a full backup if the latest full backup is older than the given time | `1M` |
+| backup_remote_remove_older_than | Delete all backups older than the given time on Amazon AWS | `1Y` |
+| backup_local_remove_older_than | Delete all backups older than the given time on local disk | `3M` |
 | backup_aws_s3_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
 | backup_aws_key_id | Amazon AWS access key id | `7M1VGFL6...` |
 | backup_aws_key_secret | Amazon AWS access key secret | `HvbMb9v8dW...` |

@@ -38,7 +38,7 @@ EXIT_CODE="0"
 
 # cleanup rdiff-backup
 echo ">> INFO: cleanup rdiff-backup for $BACKUP_OBJECT"
-if ! rdiff-backup --remove-older-than "$REMOVE_OLDER_THAN" --force "/backup/repos/$BACKUP_OBJECT";
+if ! rdiff-backup --remove-older-than "$LOCAL_REMOVE_OLDER_THAN" --force "/backup/repos/$BACKUP_OBJECT";
 then
   EXIT_CODE="4"
   echo ">> ERROR: cleanup rdiff-backup failed for $BACKUP_OBJECT"
@@ -50,7 +50,7 @@ echo ">> INFO: cleanup duplicity for $BACKUP_OBJECT"
 export AWS_ACCESS_KEY_ID="$AWS_KEY_ID"
 export AWS_SECRET_ACCESS_KEY="$AWS_KEY_SECRET"
 
-if ! duplicity remove-older-than "$REMOVE_OLDER_THAN" --force "$AWS_S3_URL/$BACKUP_OBJECT";
+if ! duplicity remove-older-than "$REMOTE_REMOVE_OLDER_THAN" --force "$AWS_S3_URL/$BACKUP_OBJECT";
 then
   EXIT_CODE="5"
   echo ">> ERROR: cleanup duplicity failed for $BACKUP_OBJECT"
