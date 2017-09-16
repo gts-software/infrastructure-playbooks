@@ -23,12 +23,19 @@ def status():
                 # store status data
                 if match:
                     object = match.group(1)
-                    details[object] = {
-                        "timestamp": datetime.utcfromtimestamp(float(row["Starttime"])),
-                        "runtime": float(row["JobRuntime"]),
-                        "exitcode": int(row["Exitval"]),
-                        "sigcode": int(row["Signal"])
-                    }
+                    exitval = int(row["Exitval"])
+                    # handle skipped backups
+                    if exitval == 99 and object in details:
+                        details[object]["skipcount"] += 1
+                    # write full details
+                    else:
+                        details[object] = {
+                            "timestamp": datetime.utcfromtimestamp(float(row["Starttime"])),
+                            "runtime": float(row["JobRuntime"]),
+                            "exitcode": exitval,
+                            "sigcode": int(row["Signal"]),
+                            "skipcount": 1 if exitval == 99 else 0
+                        }
     # get list of backup objects
     objects = [line.strip() for line in open('/backup/config/objects.list')]
     # compose summary of backup objects
@@ -51,7 +58,8 @@ def status():
         if details[object]["exitcode"] != 0:
             summary[object] = {
                 "ok": False,
-                "message": "backup failed (unknown error)"
+                "message": "backup failed (unknown error)",
+                "exitcode": details[object]["exitcode"]
             }
             ok = False
             if details[object]["exitcode"] == 2:
@@ -69,7 +77,8 @@ def status():
         if details[object]["sigcode"] != 0:
             summary[object] = {
                 "ok": False,
-                "message": "backup failed (signal caught)"
+                "message": "backup failed (signal caught)",
+                "sigcode": details[object]["sigcode"]
             }
             ok = False
             continue
@@ -77,7 +86,8 @@ def status():
         if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -3):
             summary[object] = {
                 "ok": False,
-                "message": "backup is too old"
+                "message": "backup is too old",
+                "timestamp": details[object]["timestamp"]
             }
             ok = False
             continue
