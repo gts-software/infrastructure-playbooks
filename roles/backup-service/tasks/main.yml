@@ -54,12 +54,12 @@
 - name: 'write configuration : shell variables'
   copy:
     content: |
-      AWS_KEY_ID="{{ backup_aws_key_id }}"
-      AWS_KEY_SECRET="{{ backup_aws_key_secret }}"
-      AWS_S3_URL="{{ backup_aws_s3_url }}"
-      REMOTE_FULL_IF_OLDER_THAN="{{ backup_remote_full_if_older_than }}"
-      REMOTE_REMOVE_OLDER_THAN="{{ backup_remote_remove_older_than }}"
-      LOCAL_REMOVE_OLDER_THAN="{{ backup_local_remove_older_than }}"
+      CONFIG_AWS_KEY_ID="{{ backup_aws_key_id }}"
+      CONFIG_AWS_KEY_SECRET="{{ backup_aws_key_secret }}"
+      CONFIG_AWS_S3_URL="{{ backup_aws_s3_url }}"
+      CONFIG_REMOTE_FULL_IF_OLDER_THAN="{{ backup_remote_full_if_older_than }}"
+      CONFIG_REMOTE_REMOVE_OLDER_THAN="{{ backup_remote_remove_older_than }}"
+      CONFIG_LOCAL_REMOVE_OLDER_THAN="{{ backup_local_remove_older_than }}"
     dest: /backup/config/vars.sh
     owner: root
     group: root
