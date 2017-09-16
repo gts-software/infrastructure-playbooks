@@ -10,17 +10,35 @@ parallel --will-cite --keep-order --jobs 3 --joblog /backup/logs/joblog-$BACKUP_
 # validate result
 if [ "$JOBS_FAILED_COUNT" != "0" ];
 then
-  # print warning
-  echo "BACKUP FAILED: $JOBS_FAILED_COUNT backup(s) could not be completed!"
-  echo
-
-  # print logs
-  for LOGFILE in `ls /backup/logs/*-$BACKUP_TIMESTAMP.log | sort`;
+  # count skipped backups
+  ((BACKUPS_SKIPPED_COUNT=0))
+  while IFS=$'\t' read -r -a jobEntry
   do
-    echo "################ `basename $LOGFILE` ################"
-    echo "`cat $LOGFILE`"
+   if [ "${jobEntry[6]}" == "99" ];
+   then
+     ((BACKUPS_SKIPPED_COUNT+=1))
+   fi
+  done < "/backup/logs/joblog-$BACKUP_TIMESTAMP.log"
+
+  # calculate failed backups
+  ((BACKUPS_FAILED_COUNT=$JOBS_FAILED_COUNT-$BACKUPS_SKIPPED_COUNT))
+
+  # print logs in case we have failed backups
+  if [ "$BACKUPS_FAILED_COUNT" != "0" ];
+  then
+    # print error
+    echo "BACKUP FAILED: $BACKUPS_FAILED_COUNT backup(s) could not be completed!"
+    echo "NOTE: $BACKUPS_SKIPPED_COUNT backup(s) skipped (blocked by parallel running backup processes)"
     echo
-  done
+
+    # print logs
+    for LOGFILE in `ls /backup/logs/*-$BACKUP_TIMESTAMP.log | sort`;
+    do
+      echo "################ `basename $LOGFILE` ################"
+      echo "`cat $LOGFILE`"
+      echo
+    done
+  fi
 fi
 
 # cleanup logfiles

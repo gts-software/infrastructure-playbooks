@@ -71,7 +71,7 @@ def status():
             if details[object]["exitcode"] == 5:
                 summary[object]["message"] = "backup failed (cleanup duplicity failed)"
             if details[object]["exitcode"] == 99:
-                summary[object]["message"] = "backup failed (blocked by parallel running backup process)"
+                summary[object]["message"] = "backup skipped (blocked by parallel running backup process)"
             continue
         # check if we have a bad signal code
         if details[object]["sigcode"] != 0:
