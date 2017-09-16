@@ -1,6 +1,7 @@
 - name: 'configure authorized keys'
   authorized_key:
     user: root
+    path: /root/.ssh/authorized_keys.deployment
     key: "{{ deployment_authorized_keys | join('\n') }}"
-    exclusive: false
+    exclusive: true
     manage_dir: false

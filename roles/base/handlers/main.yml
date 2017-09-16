@@ -19,3 +19,7 @@
 # ... and restart exim
 - name: 'restart exim'
   command: 'service exim4 restart'
+
+# restart sshd
+- name: 'restart sshd'
+  command: 'service ssh restart'
