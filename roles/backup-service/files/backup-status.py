@@ -6,8 +6,12 @@ import re
 from datetime import timedelta, datetime
 import json
 import sys
+import yaml
 
 def status():
+    # read configuration variables
+    with open('/backup/config/vars.yaml') as stream:
+        config = yaml.load(stream)
     # get joblog file paths
     joblogs = glob.glob('/backup/logs/joblog-*.log')
     joblogs.sort()
@@ -83,7 +87,7 @@ def status():
             ok = False
             continue
         # check if last backup is too old
-        if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -3):
+        if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -config['last_not_older_than']):
             summary[object] = {
                 "ok": False,
                 "message": "backup is too old",
