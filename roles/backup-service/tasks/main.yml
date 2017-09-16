@@ -6,10 +6,11 @@
     - parallel
     - apache2
 
-- name: 'install boto for duplicity'
+- name: 'install boto for duplicity and pyyaml for status script'
   pip: name='{{item}}' state=latest
   with_items:
     - boto
+    - pyyaml
 
 - name: 'create directories'
   file:
