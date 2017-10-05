@@ -5,6 +5,19 @@
     line: 'PermitRootLogin prohibit-password'
   notify: 'restart sshd'
 
+- name: 'configure access : do not accept environment variables'
+  replace:
+    dest: /etc/ssh/sshd_config
+    regexp: '^(\s*)AcceptEnv(\s+)'
+    replace: '#\1AcceptEnv\2'
+  notify: 'restart sshd'
+
+- name: 'configure access : do not forward environment variables'
+  replace:
+    dest: /etc/ssh/ssh_config
+    regexp: '^(\s*)SendEnv(\s+)'
+    replace: '#\1SendEnv\2'
+
 - name: 'configure access : set files containing authorized keys'
   lineinfile:
     dest: /etc/ssh/sshd_config
