@@ -1,3 +1,2 @@
-- include: image-cache.yml
 - include: image-build.yml
 - include: image-push.yml
