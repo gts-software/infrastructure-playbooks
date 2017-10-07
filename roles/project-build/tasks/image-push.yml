@@ -18,3 +18,12 @@
   until: push_results.finished
   retries: 360
   delay: 10
+
+- name: 'project build : push additional tag'
+  docker_image:
+    name: '{{ project | project_get_image_repository(image) }}'
+    tag: '{{ project | project_get_image_tag_latest(image) }}'
+    push: '{{ docker_push | default(false) | bool }}'
+  with_items: '{{ project | project_get_images }}'
+  loop_control:
+    loop_var: image

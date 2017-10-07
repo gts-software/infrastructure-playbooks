@@ -194,6 +194,9 @@ def filter_get_image_repository(project, image):
 def filter_get_image_tag(project, image):
     return project['mode'] + '_' + project['branch'] + '_' + project['version']
 
+def filter_get_image_tag_latest(project, image):
+    return project['mode'] + '_' + project['branch'] + '_' + 'latest'
+
 def filter_get_image_buildargs(project, image):
     result = {
         'PROJECT_MODE':    project['mode'],
@@ -227,5 +230,6 @@ class FilterModule(object):
             'project_get_image_dockerfile'        : filter_get_image_dockerfile,
             'project_get_image_repository'        : filter_get_image_repository,
             'project_get_image_tag'               : filter_get_image_tag,
+            'project_get_image_tag_latest'        : filter_get_image_tag_latest,
             'project_get_image_buildargs'         : filter_get_image_buildargs,
         }
