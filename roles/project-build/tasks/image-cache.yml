@@ -1,8 +1,0 @@
-- name: 'project build : prepare cache'
-  docker_image:
-    name: '{{ project | project_get_image_repository(image) }}'
-    tag: '{{ project | project_get_image_tag_latest(image) }}'
-  with_items: '{{ project | project_get_images }}'
-  loop_control:
-    loop_var: image
-  ignore_errors: true

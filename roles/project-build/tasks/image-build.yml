@@ -1,10 +1,12 @@
 - name: 'project build : build image'
-  docker_image:
-    path: '{{ project | project_get_image_path(image, project_source) }}'
-    dockerfile: '{{ project | project_get_image_dockerfile(image, project_source) }}'
-    name: '{{ project | project_get_image_repository(image) }}'
-    tag: '{{ project | project_get_image_tag(image) }}'
-    buildargs: '{{ project | project_get_image_buildargs(image) }}'
+  shell: |
+    docker build \
+    --cache-from "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}" \
+    --file "{{ project | project_get_image_dockerfile(image, project_source) }}" \
+    --tag "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag(image) }}" \
+    --tag "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}" \
+    {% for key, value in (project | project_get_image_buildargs(image)).iteritems() %} --build-arg "{{ key }}={{ value }}" {% endfor %} \
+    "{{ project | project_get_image_path(image, project_source) }}"
   with_items: '{{ project | project_get_images }}'
   loop_control:
     loop_var: image
@@ -20,9 +22,3 @@
   until: build_results.finished
   retries: 360
   delay: 10
-
-- name: 'project build : tag image'
-  shell: docker tag {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag(image) }} {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}
-  with_items: '{{ project | project_get_images }}'
-  loop_control:
-    loop_var: image
