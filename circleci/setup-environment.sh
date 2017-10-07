@@ -14,7 +14,7 @@ echo "export PROJECT_VERSION=$CIRCLE_SHA1" >> "$BASH_ENV"
 
 # docker login
 echo "Perform docker login..."
-docker login --username ${QUAY_USER} --email ${QUAY_MAIL} --password ${QUAY_PASS} quay.io
+docker login --username ${QUAY_USER} --password ${QUAY_PASS} quay.io
 
 # ssh known_hosts
 echo "Setup SSH known hosts..."
