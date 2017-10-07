@@ -22,10 +22,7 @@
   delay: 10
 
 - name: 'project build : tag image'
-  shell: >
-    docker tag
-      {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag(image) }}
-      {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}
+  shell: docker tag {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag(image) }} {{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}
   with_items: '{{ project | project_get_images }}'
   loop_control:
     loop_var: image
