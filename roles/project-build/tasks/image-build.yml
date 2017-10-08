@@ -1,8 +1,6 @@
 - name: 'project build : build image'
   shell: |
-    docker pull "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}" || true
     docker build \
-    --cache-from "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}" \
     --file "{{ project | project_get_image_dockerfile(image, project_source) }}" \
     --tag "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag(image) }}" \
     --tag "{{ project | project_get_image_repository(image) }}:{{ project | project_get_image_tag_latest(image) }}" \
