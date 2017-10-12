@@ -1,24 +1,24 @@
 
 - name: 'setup accounts'
   user:
-    name: '{{ admin.name }}'
+    name: '{{ admin.key }}'
     groups: 'sudo'
     shell: '/bin/bash'
     system: no
     force: yes
-    state: '{{ admin.state }}'
-  with_items: '{{ admins | default([]) }}'
+    state: '{{ admin.value.state }}'
+  with_dict: '{{ admins | default({}) }}'
   loop_control:
     loop_var: admin
 
 - name: 'setup authorized keys'
   authorized_key:
-    user: '{{ admin.name }}'
-    key: "{{ admin.authorized_keys | join('\n') }}"
+    user: '{{ admin.key }}'
+    key: "{{ admin.value.authorized_keys | join('\n') }}"
     exclusive: true
     manage_dir: true
-  when: 'admin.state == "present"'
-  with_items: '{{ admins | default([]) }}'
+  when: 'admin.value.state == "present"'
+  with_dict: '{{ admins | default({}) }}'
   loop_control:
     loop_var: admin
 
