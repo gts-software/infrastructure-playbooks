@@ -1,0 +1,31 @@
+
+- name: 'setup accounts'
+  user:
+    name: '{{ admin.name }}'
+    groups: 'sudo'
+    shell: '/bin/bash'
+    system: no
+    force: yes
+    state: '{{ admin.state }}'
+  with_items: '{{ admins | default([]) }}'
+  loop_control:
+    loop_var: admin
+
+- name: 'setup authorized keys'
+  authorized_key:
+    user: '{{ admin.name }}'
+    key: "{{ admin.authorized_keys | join('\n') }}"
+    exclusive: true
+    manage_dir: true
+  when: 'admin.state == "present"'
+  with_items: '{{ admins | default([]) }}'
+  loop_control:
+    loop_var: admin
+
+- name: 'disable password in sudoers'
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo\s+'
+    line: '%sudo ALL=(ALL:ALL) NOPASSWD:ALL'
+    validate: '/usr/sbin/visudo -cf %s'
