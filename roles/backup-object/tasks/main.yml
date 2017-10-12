@@ -11,6 +11,6 @@
     user: root
     path: /root/.ssh/authorized_keys.backup
     key: "{{ backup_authorized_keys | join('\n') }}"
-    key_options: 'command="/usr/local/bin/rdiff-backup-server-with-snapshot.sh",from="{{ groups[''backup''] | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict'
+    key_options: 'command="/usr/local/bin/rdiff-backup-server-with-snapshot.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict'
     exclusive: true
     manage_dir: false
