@@ -11,6 +11,10 @@
     restart_retries: 5
     state: started
     command: >
+      {% if gate_disable_tls | default(false) %}
+      --entrypoints='Name:http Address::80'
+      --defaultentrypoints=http
+      {% else %}
       --acme=true
       --acme.onhostrule=true
       --acme.email={{ base_devops_email }}
@@ -19,6 +23,7 @@
       --entrypoints='Name:http Address::80 Redirect.EntryPoint:https'
       --entrypoints='Name:https Address::443 TLS'
       --defaultentrypoints=https,http
+      {% endif %}
       --docker=true
       --docker.exposedbydefault=false
       --docker.watch=true
