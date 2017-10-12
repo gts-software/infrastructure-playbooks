@@ -29,12 +29,40 @@ def get_service_codename(project, service):
         return '{0}_{1}_production_{2}'.format(project['group'], project['name'], service)
     raise ValueError('invalid mode')
 
-def filter_get_target(target, mode, branch):
+def helper_get_target(target, mode, branch):
+    target_string = None
     if mode == 'staging':
-        return target['staging'][branch]
-    if mode == 'production':
-        return target['production']
-    raise ValueError('invalid mode')
+        target_string = target['staging'][branch]
+    elif mode == 'production':
+        target_string = target['production']
+    else
+        raise ValueError('invalid mode')
+    target_parts = target_string.split('@')
+    if len(target_parts) > 2:
+        raise ValueError('invalid target string')
+    if len(target_parts) == 2:
+        target_parts = { 'user': target_parts[0], 'host': target_parts[1] }
+    else
+        target_parts = { 'user': None, 'host': target_parts[0] }
+    target_parts['host'] = target_parts['host'].split(':')
+    if len(target_parts['host']) > 2:
+        raise ValueError('invalid target string')
+    if len(target_parts['host']) == 2:
+        target_parts['port'] = int(target_parts['host'][1])
+        target_parts['host'] = target_parts['host'][0]
+    else
+        target_parts['port'] = None
+        target_parts['host'] = target_parts['host'][0]
+    return target_parts
+
+def filter_get_target_host(target, mode, branch):
+    return helper_get_target(target, mode, branch)['host']
+
+def filter_get_target_port(target, mode, branch):
+    return helper_get_target(target, mode, branch)['port']
+
+def filter_get_target_user(target, mode, branch):
+    return helper_get_target(target, mode, branch)['user']
 
 def filter_get_network(project):
     return get_project_codename(project)
@@ -210,7 +238,9 @@ class FilterModule(object):
 
     def filters(self):
         return {
-            'project_get_target'                  : filter_get_target,
+            'project_get_target_host'             : filter_get_target_host,
+            'project_get_target_port'             : filter_get_target_port,
+            'project_get_target_user'             : filter_get_target_user,
             'project_get_network'                 : filter_get_network,
             'project_get_services'                : filter_get_services,
             'project_get_service_name'            : filter_get_service_name,

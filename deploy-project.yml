@@ -3,16 +3,18 @@
   tasks:
   - name: 'node'
     add_host:
-      name: '{{ project_target | project_get_target(project_mode, project_branch) }}'
-      ansible_user: root
+      name: 'target'
+      ansible_host: '{{ project_target | project_get_target_host(project_mode, project_branch) }}'
+      ansible_port: '{{ project_target | project_get_target_port(project_mode, project_branch) | default(22) }}'
+      ansible_user: '{{ project_target | project_get_target_user(project_mode, project_branch) | default("root") }}'
 
 - name: 'deploy project'
-  hosts: '{{ project_target | project_get_target(project_mode, project_branch) }}'
+  hosts: 'target'
   roles:
     - project-facts
     - project-deploy
 
 - name: 'prune docker'
-  hosts: '{{ project_target | project_get_target(project_mode, project_branch) }}'
+  hosts: 'target'
   roles:
     - prune-docker
