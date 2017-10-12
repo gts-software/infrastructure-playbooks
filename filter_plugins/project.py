@@ -35,14 +35,14 @@ def helper_get_target(target, mode, branch):
         target_string = target['staging'][branch]
     elif mode == 'production':
         target_string = target['production']
-    else
+    else:
         raise ValueError('invalid mode')
     target_parts = target_string.split('@')
     if len(target_parts) > 2:
         raise ValueError('invalid target string')
     if len(target_parts) == 2:
         target_parts = { 'user': target_parts[0], 'host': target_parts[1] }
-    else
+    else:
         target_parts = { 'user': None, 'host': target_parts[0] }
     target_parts['host'] = target_parts['host'].split(':')
     if len(target_parts['host']) > 2:
@@ -50,7 +50,7 @@ def helper_get_target(target, mode, branch):
     if len(target_parts['host']) == 2:
         target_parts['port'] = int(target_parts['host'][1])
         target_parts['host'] = target_parts['host'][0]
-    else
+    else:
         target_parts['port'] = None
         target_parts['host'] = target_parts['host'][0]
     return target_parts
