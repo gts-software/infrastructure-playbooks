@@ -5,8 +5,8 @@
     add_host:
       name: 'target'
       ansible_host: '{{ project_target | project_get_target_host(project_mode, project_branch) }}'
-      ansible_port: '{{ project_target | project_get_target_port(project_mode, project_branch) | default(22) }}'
-      ansible_user: '{{ project_target | project_get_target_user(project_mode, project_branch) | default("root") }}'
+      ansible_port: '{{ project_target | project_get_target_port(project_mode, project_branch) | default(22, True) }}'
+      ansible_user: '{{ project_target | project_get_target_user(project_mode, project_branch) | default("root", True) }}'
 
 - name: 'deploy project'
   hosts: 'target'
