@@ -10,8 +10,8 @@
     exposed_ports:   '{{ project | project_get_service_exposed_ports(service) }}'
     published_ports: '{{ project | project_get_service_published_ports(service) }}'
     capabilities:    '{{ project | project_get_service_capabilities(service) }}'
-    restart_policy:  'on-failure'
-    restart_retries: 5
+    restart_policy:  'unless-stopped'
+    restart_retries: 10
     state:           '{{ project | project_get_service_state(service) }}'
   async: 3600
   poll: 0

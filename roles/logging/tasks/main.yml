@@ -3,8 +3,8 @@
     name: core_logging
     image: iamatypeofwalrus/logspout-loggly:latest
     pull: '{{ docker_pull | default(false) | bool }}'
-    restart_policy: 'on-failure'
-    restart_retries: 5
+    restart_policy: 'unless-stopped'
+    restart_retries: 10
     state: started
     env:
       LOGGLY_TOKEN: '{{ logging_token }}'
