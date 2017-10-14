@@ -18,6 +18,7 @@
     - exim4
     - byobu
     - rdiff-backup
+    - reboot-notifier
 
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
