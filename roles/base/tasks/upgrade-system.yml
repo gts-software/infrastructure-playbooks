@@ -8,11 +8,45 @@
     name: unattended-upgrades
     state: latest
 
-- name: 'upgrade system : configure unattended-upgrades'
+- name: 'upgrade system : configure unattended-upgrades (disable old block)'
   blockinfile:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
-    state: present
+    state: absent
     create: yes
     block: |
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Unattended-Upgrade "1";
+
+- name: 'upgrade system : configure unattended-upgrades (1/2)'
+  blockinfile:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    state: present
+    create: yes
+    marker: '// {mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+
+- name: 'upgrade system : configure unattended-upgrades (2/2)'
+  blockinfile:
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    state: present
+    create: yes
+    marker: '// {mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      Unattended-Upgrade::MinimalSteps "true";
+      Unattended-Upgrade::InstallOnShutdown "false";
+      Unattended-Upgrade::Mail "{{ base_devops_email }}";
+      Unattended-Upgrade::MailOnlyOnError "true";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+      Unattended-Upgrade::Automatic-Reboot "true";
+      Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+
+- name: 'upgrade system : configure needrestart'
+  blockinfile:
+    dest: /etc/needrestart/conf.d/custom.conf
+    state: present
+    create: yes
+    block: |
+      $nrconf{restart} = 'a';
+      $nrconf{kernelhints} = -1;
