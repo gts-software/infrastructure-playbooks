@@ -19,6 +19,7 @@
     - byobu
     - rdiff-backup
     - reboot-notifier
+    - needrestart
 
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
