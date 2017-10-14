@@ -1,4 +1,4 @@
-- name: deploy base
+- name: deploy all
   hosts: all
   roles:
     - base
@@ -23,3 +23,8 @@
   hosts: operations
   roles:
     - prune-docker
+
+- name: 'deploy all : reboot'
+  hosts: all
+  roles:
+    - reboot-if-required
