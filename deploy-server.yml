@@ -24,7 +24,7 @@
   roles:
     - prune-docker
 
-- name: 'deploy all : reboot'
+- name: 'deploy all : cleanup'
   hosts: all
   roles:
-    - reboot-if-required
+    - cleanup-reboot
