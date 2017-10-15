@@ -1,6 +1,7 @@
 - name: 'update package cache'
   apt:
     update_cache: yes
+  changed_when: False
 
 - name: 'install essentials'
   apt: name='{{item}}' state=latest
