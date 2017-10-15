@@ -167,4 +167,12 @@
     mode: 0755
   notify: restart apache
 
+# scan for backup object keys
+
+- name: 'scan for ssh host keys of backup objects'
+  shell: 'touch ~/.ssh/known_hosts; ssh-keygen -f ~/.ssh/known_hosts -F "{{ item }}" > /dev/null || ssh-keyscan -T 10 "{{ item }}" -p 22 >> ~/.ssh/known_hosts'
+  register: 'command_ssh_keyscan'
+  changed_when: "command_ssh_keyscan.stderr|length > 0"
+  with_items: "{{ groups['operations'] | map('extract', hostvars, ['ansible_host']) | list }}"
+
 - meta: flush_handlers
