@@ -25,6 +25,7 @@
     - rdiff-backup
     - reboot-notifier
     - needrestart
+    - bridge-utils
 
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
