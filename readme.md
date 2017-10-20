@@ -52,7 +52,6 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | base_name_host | Hostname to be applied | `alpha` |
 | base_name_domain | Domainname to be applied | `example.com` |
 | base_devops_email | Email address of the DevOps team | `devops@example.com` |
-| base_inet_if | The internet network interface | `ens3` |
 | **Remote Access** | | |
 | base_authorized_keys | Authorized user keys for root access | `- ssh-rsa AAAAB3N...` |
 | backup_authorized_keys | Authorized keys for backup procedure access | `- ssh-rsa AAAAB3N...` |

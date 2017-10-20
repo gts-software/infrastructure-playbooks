@@ -3,5 +3,4 @@ ansible_host: beta.example.com
 ansible_user: root
 
 # base
-base_inet_if: ens3
 base_name_host: beta
