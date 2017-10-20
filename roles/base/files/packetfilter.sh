@@ -19,7 +19,13 @@ case "$1" in
     echo "Ignoring!"
 		;;
 
+  'flush-connections')
+    echo "Flushing tracked connections..."
+    conntrack --flush
+    echo "Done!"
+		;;
+
   *)
-		echo "Usage: $0 { start | stop | restart }"
+		echo "Usage: $0 { start | stop | restart | flush-connections }"
 		;;
 esac

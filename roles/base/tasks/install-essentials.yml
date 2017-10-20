@@ -24,6 +24,7 @@
     - reboot-notifier
     - needrestart
     - bridge-utils
+    - conntrack
 
 - name: 'remove unrequired default packages'
   apt: name='{{item}}' purge=yes state=absent
