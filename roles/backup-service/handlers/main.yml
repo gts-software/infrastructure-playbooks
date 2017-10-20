@@ -1,7 +1,6 @@
-# restart shorewall
-- name: 'restart shorewall'
-  command: 'service {{ item }} restart'
-  with_items: [ 'shorewall', 'shorewall6' ]
+# restart packetfilter
+- name: 'restart packetfilter'
+  command: 'service packetfilter restart'
 
 # restart apache
 - name: 'restart apache'

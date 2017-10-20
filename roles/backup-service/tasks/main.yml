@@ -95,13 +95,13 @@
 
 # configure firewall
 - name: 'allow http traffic for monitoring'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/rules'
-    line: '{{ item[1] }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - [ 'ACCEPT all fw tcp 80' ]
-  notify: restart shorewall
+  copy:
+    src: 'packetfilter-config-backupservice.sh'
+    dest: '/etc/packetfilter/10-backupservice.sh'
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart packetfilter
 
 - meta: flush_handlers
 

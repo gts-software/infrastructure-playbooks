@@ -38,16 +38,3 @@
       - name: bridge
       - name: core_gate
     purge_networks: true
-
-# configure firewall
-- name: 'gate : allow http and https traffic'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/rules'
-    line: '{{ item[1] }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - 'ACCEPT all fw tcp 80'
-      - 'ACCEPT all fw tcp 443'
-  notify: restart shorewall
-
-- meta: flush_handlers

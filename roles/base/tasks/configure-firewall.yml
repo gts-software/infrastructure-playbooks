@@ -1,76 +1,64 @@
-- name: 'configure firewall : enable shorewall'
-  command: 'systemctl enable /lib/systemd/system/{{ item }}.service'
-  register: task_enable_shorewall_result
-  changed_when: "'Created symlink' in task_enable_shorewall_result.stderr"
+# purge shorewall
+
+- name: 'configure firewall : remove shorewall'
+  apt: name='{{item}}' purge=yes state=absent
   with_items:
-    - [ 'shorewall', 'shorewall6' ]
-  notify: restart shorewall
+    - shorewall
+    - shorewall6
+  notify: reboot system
 
-- name: 'configure firewall : enable forwarding'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/{{ item[0] }}.conf'
-    line: '{{ item[1].line }}'
-    regexp: '{{ item[1].regexp }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - { line: 'IP_FORWARDING=Yes', regexp: '^IP_FORWARDING=' }
-  notify: restart shorewall
+- name: 'configure firewall : remove shorewall configuration'
+  file:
+    state: absent
+    path: "/etc/{{ item }}"
+  with_items:
+    - shorewall
+    - shorewall6
+  notify: reboot system
 
-- name: 'configure firewall : setup zones'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/zones'
-    create: true
-    owner: 'root'
-    group: 'root'
+# setup new system
+
+- name: 'configure firewall : deploy scripts'
+  copy:
+    src: '{{ item }}'
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - packetfilter.sh
+    - packetfilter-helper.sh
+  notify: restart packetfilter
+
+- name: 'configure firewall : create config directory'
+  file:
+    path: '/etc/packetfilter'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart packetfilter
+
+- name: 'configure firewall : deploy config'
+  copy:
+    src: 'packetfilter-config-base.sh'
+    dest: '/etc/packetfilter/00-base.sh'
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart packetfilter
+
+- name: 'configure firewall : deploy systemd service file'
+  copy:
+    src: 'packetfilter.service'
+    dest: /lib/systemd/system/
+    owner: root
+    group: root
     mode: 0644
-    line: '{{ item[1].line }}'
-    regexp: '{{ item[1].regexp }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - { line: 'fw firewall', regexp: '^fw\s+' }
-      - { line: 'inet -', regexp: '^inet\s+' }
-  notify: restart shorewall
+  notify: restart packetfilter
 
-- name: 'configure firewall : setup interfaces'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/interfaces'
-    create: true
-    owner: 'root'
-    group: 'root'
-    mode: 0644
-    line: '{{ item[1].line }}'
-    regexp: '{{ item[1].regexp }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - { line: 'inet {{ base_inet_if }} detect dhcp,tcpflags,optional', regexp: '^inet\s+' }
-  notify: restart shorewall
-
-- name: 'configure firewall : setup policies'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/policy'
-    create: true
-    owner: 'root'
-    group: 'root'
-    mode: 0644
-    line: '{{ item[1].line }}'
-    regexp: '{{ item[1].regexp }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - { line: 'inet all DROP', regexp: '^inet\s+' }
-      - { line: 'fw all ACCEPT', regexp: '^fw\s+' }
-      - { line: 'all all REJECT', regexp: '^all\s+' }
-  notify: restart shorewall
-
-- name: 'configure firewall : setup rules'
-  lineinfile:
-    dest: '/etc/{{ item[0] }}/rules'
-    create: true
-    owner: 'root'
-    group: 'root'
-    mode: 0644
-    line: '{{ item[1] }}'
-  with_nested:
-    - [ 'shorewall', 'shorewall6' ]
-    - - 'ACCEPT all fw tcp 22'
-      - 'Ping(ACCEPT) all fw'
-  notify: restart shorewall
+- name: 'configure firewall : enable packetfilter service'
+  command: 'systemctl enable /lib/systemd/system/packetfilter.service'
+  register: task_enable_packetfilter_result
+  changed_when: "'Created symlink' in task_enable_packetfilter_result.stderr"
+  notify: restart packetfilter
