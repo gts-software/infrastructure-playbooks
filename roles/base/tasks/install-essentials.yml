@@ -25,6 +25,11 @@
     - needrestart
     - bridge-utils
 
+- name: 'remove unrequired default packages'
+  apt: name='{{item}}' purge=yes state=absent
+  with_items:
+    - ufw
+
 - name: 'install essentials : pip and toposort'
   pip: name='{{item}}' state=latest
   with_items:
