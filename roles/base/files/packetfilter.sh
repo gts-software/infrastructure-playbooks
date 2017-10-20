@@ -7,7 +7,10 @@ case "$1" in
     source /usr/local/bin/packetfilter-helper.sh
     for CONFIG_FILE in `ls /etc/packetfilter/*.sh | sort -V`;
     do
-      source "$CONFIG_FILE"
+      (
+        set -e
+        source "$CONFIG_FILE"
+      )
     done
     echo "Done!"
   	;;
