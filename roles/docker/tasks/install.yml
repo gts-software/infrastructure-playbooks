@@ -22,3 +22,5 @@
       ExecStart=
       ExecStart=/usr/bin/dockerd --host=fd://
   notify: reboot system
+
+- meta: flush_handlers

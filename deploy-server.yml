@@ -15,8 +15,6 @@
   roles:
     - backup-object
     - docker
-    - logging
-    - gate
     - deployment-target
 
 - name: 'deploy operations : prune docker'

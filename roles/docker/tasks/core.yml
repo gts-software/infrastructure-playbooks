@@ -38,3 +38,32 @@
       - name: bridge
       - name: core_gate
     purge_networks: true
+
+- name: 'logging : container'
+  docker_container:
+    name: core_logging
+    image: iamatypeofwalrus/logspout-loggly:latest
+    pull: '{{ docker_pull | default(false) | bool }}'
+    restart_policy: 'unless-stopped'
+    state: started
+    env:
+      LOGGLY_TOKEN: '{{ logging_token }}'
+      LOGGLY_TAGS: '{{ base_name_host }}.{{ base_name_domain }}'
+      FILTER_NAME: '*'
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    networks:
+      - name: bridge
+    purge_networks: true
+
+# configure firewall
+- name: 'allow http and https traffik'
+  copy:
+    src: 'packetfilter-config-docker.sh'
+    dest: '/etc/packetfilter/10-docker.sh'
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart packetfilter
+
+- meta: flush_handlers

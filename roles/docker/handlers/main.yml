@@ -1,3 +1,7 @@
+# restart packetfilter
+- name: 'restart packetfilter'
+  command: 'service packetfilter restart'
+
 # reboot system
 - name: 'reboot system'
   command: bash -c "screen -d -m bash -c 'service ssh stop; sleep 7; shutdown --reboot now'; sleep 1"
