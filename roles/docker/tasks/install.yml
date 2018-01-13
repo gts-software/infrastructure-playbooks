@@ -20,7 +20,7 @@
     content: |
       [Service]
       ExecStart=
-      ExecStart=/usr/bin/dockerd --host=fd://
+      ExecStart=/usr/bin/dockerd --host=fd:// --dns 8.8.8.8
   notify: reboot system
 
 - meta: flush_handlers
