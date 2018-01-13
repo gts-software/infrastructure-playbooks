@@ -16,6 +16,7 @@
     - curl
     - jq
     - net-tools
+    - traceroute
     - python-pip
     - python-virtualenv
     - exim4
