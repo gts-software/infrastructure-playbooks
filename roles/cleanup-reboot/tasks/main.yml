@@ -1,7 +1,7 @@
-- name: 'purge old kernels'
-  command: purge-old-kernels -qy
-  register: 'command_purge_old_kernels'
-  changed_when: "'No kernels are eligible for removal' not in command_purge_old_kernels.stdout"
+#- name: 'purge old kernels'
+#  command: purge-old-kernels -qy
+#  register: 'command_purge_old_kernels'
+#  changed_when: "'No kernels are eligible for removal' not in command_purge_old_kernels.stdout"
 
 - name: remove dependencies that are no longer required
   apt:
