@@ -19,6 +19,7 @@
       --acme.email={{ base_devops_email }}
       --acme.storage=/certs/acme.json
       --acme.entrypoint=https
+      --acme.httpChallenge.entryPoint=http
       --entrypoints='Name:http Address::80 Redirect.EntryPoint:https'
       --entrypoints='Name:https Address::443 TLS'
       --defaultentrypoints=https,http
