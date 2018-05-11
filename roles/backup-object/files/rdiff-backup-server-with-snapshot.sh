@@ -41,25 +41,39 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
   echo "> running rdiff-backup server"
 ) 1>&2 </dev/null || exit 1
 
+# clean up procedures
+cleanup() {
+  # release snapshot
+  (
+    echo "> unmounting snapshot directory"
+    sleep 1s
+    umount /mnt/root-snapshot
+    sleep 1s
+
+    echo "> show snapshot status"
+    lvdisplay /dev/main/root-snapshot
+
+    echo "> removing snapshot"
+    lvremove --force /dev/main/root-snapshot
+
+    echo "> completed"
+  ) 1>&2 </dev/null
+}
+
+cleanup_on_trap() {
+  ( killall rdiff-backup ) 1>&2 </dev/null
+  cleanup
+  exit 111
+}
+
+trap cleanup_on_trap INT TERM
+
 # run rdiff-backup server
 rdiff-backup --server --restrict-read-only /mnt/root-snapshot
 EXIT_CODE=$?
-sleep 1s
 
-# release snapshot
-(
-  echo "> unmounting snapshot directory"
-	umount /mnt/root-snapshot
-  sleep 1s
-
-  echo "> show snapshot status"
-	lvdisplay /dev/main/root-snapshot
-
-  echo "> removing snapshot"
-	lvremove --force /dev/main/root-snapshot
-
-  echo "> completed"
-) 1>&2 </dev/null
+# cleanup
+cleanup
 
 # return exit code of rdiff-backup
 exit $EXIT_CODE
