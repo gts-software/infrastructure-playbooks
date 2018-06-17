@@ -11,21 +11,21 @@
     state: started
     command: >
       {% if gate_disable_tls | default(false) %}
-      --entrypoints='Name:http Address::80'
-      --defaultentrypoints=http
+      --entryPoints='Name:http Address::80'
+      --defaultEntryPoints=http
       {% else %}
       --acme=true
-      --acme.onhostrule=true
+      --acme.onHostRule=true
       --acme.email={{ base_devops_email }}
       --acme.storage=/certs/acme.json
-      --acme.entrypoint=https
+      --acme.entryPoint=https
       --acme.httpChallenge.entryPoint=http
-      --entrypoints='Name:http Address::80 Redirect.EntryPoint:https'
-      --entrypoints='Name:https Address::443 TLS'
-      --defaultentrypoints=https,http
+      --entryPoints='Name:http Address::80 Redirect.EntryPoint:https'
+      --entryPoints='Name:https Address::443 TLS'
+      --defaultEntryPoints=https,http
       {% endif %}
       --docker=true
-      --docker.exposedbydefault=false
+      --docker.exposedByDefault=false
       --docker.watch=true
       --web=true
     volumes:
