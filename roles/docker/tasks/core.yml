@@ -15,6 +15,7 @@
       --defaultEntryPoints=http
       {% else %}
       --acme=true
+      --acme.onDemand=true
       --acme.onHostRule=true
       --acme.email={{ base_devops_email }}
       --acme.storage=/certs/acme.json
@@ -28,6 +29,7 @@
       --docker.exposedByDefault=false
       --docker.watch=true
       --web=true
+      --logLevel=INFO
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
       - '/data/core_gate/certs/:/certs'
