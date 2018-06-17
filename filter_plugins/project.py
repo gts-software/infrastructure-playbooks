@@ -109,7 +109,12 @@ def filter_get_service_labels(project, service):
             if item['type'] == 'http':
                 result['traefik.enable'] = 'true'
                 result['traefik.backend'] = get_service_codename(project, service)
-                result['traefik.frontend.rule'] = 'Host:' + ','.join( filter( lambda x: x is not None, map( mapdomain, item['domains'] ) ) )
+                if 'domains' in item:
+                    result['traefik.frontend.rule'] = 'Host:' + ','.join( filter( lambda x: x is not None, map( mapdomain, item['domains'] ) ) )
+                if 'rule' in item:
+                    result['traefik.frontend.rule'] = item['rule']
+                if 'priority' in item:
+                    result['traefik.frontend.priority'] = str(item['priority'])
                 result['traefik.port'] = str(item['port'])
                 result['traefik.docker.network'] = 'core_gate'
     return result
