@@ -128,7 +128,19 @@ def filter_get_service_env(project, service):
         result['PROJECT_NAME'] = project['name']
     if 'environment' in project['services'][service]:
         for envKey in project['services'][service]['environment']:
-            result[envKey] = project['services'][service]['environment'][envKey]
+            envVal = project['services'][service]['environment'][envKey]
+            if isinstance(envVal, dict):
+                if project['mode'] in envVal:
+                    envVal = envVal[project['mode']]
+                else:
+                    envVal = None
+            if isinstance(envVal, dict):
+                if project['branch'] in envVal:
+                    envVal = envVal[project['branch']]
+                else:
+                    envVal = None
+            if envVal is not None:
+                result[envKey] = envVal
     return result
 
 def filter_get_service_volumes(project, service):
