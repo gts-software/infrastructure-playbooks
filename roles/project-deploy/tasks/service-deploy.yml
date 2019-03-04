@@ -12,6 +12,8 @@
     capabilities:    '{{ project | project_get_service_capabilities(service) }}'
     restart_policy:  'unless-stopped'
     state:           '{{ project | project_get_service_state(service) }}'
+    log_options:
+      max-size: '10m'
   async: 3600
   poll: 0
   register: deploy_wait
