@@ -47,7 +47,7 @@ echo "* PROJECT_BRANCH=$PROJECT_BRANCH"
 echo "* PROJECT_VERSION=$PROJECT_VERSION"
 
 cd "$PLAYBOOK_DIR"
-ansible-playbook $PLAYBOOK_DIR/build-project.yml -vvv -e docker_push=$DOCKER_PUSH -e project_source=$PROJECT_SOURCE -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @$PROJECT_SOURCE/project.yml
+ansible-playbook $PLAYBOOK_DIR/build-project.yml -v -e docker_push=$DOCKER_PUSH -e project_source=$PROJECT_SOURCE -e project_mode=$PROJECT_MODE -e project_branch=$PROJECT_BRANCH -e project_version=$PROJECT_VERSION -e @$PROJECT_SOURCE/project.yml
 
 cd "$OLD_DIR"
 echo "Done!"
