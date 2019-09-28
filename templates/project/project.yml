@@ -6,7 +6,7 @@ project_name: simple
 project_images:
   app:
     dockerfile: Dockerfile
-    repository: quay.io/some/example
+    repository: docker.pkg.github.com/thisis/some/example
 
 # domains used to serve the application
 project_domains:

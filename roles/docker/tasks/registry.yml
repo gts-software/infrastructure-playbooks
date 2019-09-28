@@ -1,6 +1,6 @@
-- name: 'registry : quay'
+- name: 'registry : login'
   docker_login:
-    registry: quay.io
-    username: '{{ quay_username }}'
-    password: '{{ quay_password }}'
+    registry: '{{ registry_fqdn }}'
+    username: '{{ registry_username }}'
+    password: '{{ registry_password }}'
     email: '{{ base_devops_email }}'

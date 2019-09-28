@@ -56,9 +56,10 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | base_authorized_keys | Authorized user keys for root access | `- ssh-rsa AAAAB3N...` |
 | backup_authorized_keys | Authorized keys for backup procedure access | `- ssh-rsa AAAAB3N...` |
 | deployment_authorized_keys | Authorized keys for deployment access | `- ssh-rsa AAAAB3N...` |
-| **Quay** | | |
-| quay_username | Quay.io username  | `example+deployment` |
-| quay_password | Quay.io password  | `nVKU7....5Qi4Y` |
+| **Registry** | | |
+| registry_username | Registry username  | `example+deployment` |
+| registry_password | Registry password  | `nVKU7....5Qi4Y` |
+| registry_fqdn | Registry FQDN  | `docker.pkg.github.com` |
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
@@ -118,7 +119,7 @@ project_name: simple
 project_images:
   app:
     dockerfile: Dockerfile
-    repository: quay.io/some/example
+    repository: docker.pkg.github.com/some/example
 
 # domains used to serve the application
 project_domains:
