@@ -13,7 +13,7 @@ echo "export PROJECT_BRANCH=$CIRCLE_BRANCH" >> "$BASH_ENV"
 echo "export PROJECT_VERSION=$CIRCLE_SHA1" >> "$BASH_ENV"
 
 # docker login
-echo "Perform docker login..."
+echo "Perform docker login [${REGISTRY_USER}@${REGISTRY_FQDN}]..."
 docker login --username ${REGISTRY_USER} --password ${REGISTRY_PASS} ${REGISTRY_FQDN}
 
 # ssh known_hosts
