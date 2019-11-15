@@ -5,7 +5,7 @@
 - name: 'gate : container'
   docker_container:
     name: core_gate
-    image: traefik:latest
+    image: traefik:v1.7
     pull: '{{ docker_pull | default(false) | bool }}'
     restart_policy: 'unless-stopped'
     state: started
