@@ -1,16 +1,19 @@
-- name: 'deploy rdiff-backup wrapper'
+- name: 'deploy utilities'
   copy:
-    src: rdiff-backup-server-with-snapshot.sh
+    src: '{{ item }}'
     dest: /usr/local/bin
     owner: root
     group: root
     mode: 0755
+  with_items:
+    - run-with-snapshot.sh
+    - backup-on-pull.sh
 
 - name: 'configure authorized keys'
   authorized_key:
     user: root
     path: /root/.ssh/authorized_keys.backup
     key: "{{ backup_authorized_keys | join('\n') }}"
-    key_options: 'command="/usr/local/bin/rdiff-backup-server-with-snapshot.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict'
+    key_options: 'command="backup-on-pull.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict'
     exclusive: true
     manage_dir: false

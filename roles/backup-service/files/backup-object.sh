@@ -8,13 +8,13 @@ BACKUP_OBJECT="$1"
 echo ">> INFO: acquiring lock for backup of $BACKUP_OBJECT"
 
 EXIT_CODE="0"
-flock -x -E 99 -w 60 "/backup/locks/$BACKUP_OBJECT.lock" /backup/scripts/backup-object-main.sh "$BACKUP_OBJECT" || EXIT_CODE="$?"
+flock -x -E 99 -w 60 "/backup/locks/$BACKUP_OBJECT.lock" /backup/scripts/backup-object-task.sh "$BACKUP_OBJECT" || EXIT_CODE="$?"
 
 if [ "$EXIT_CODE" != "0" ];
 then
   if [ "$EXIT_CODE" == "99" ];
   then
-    echo ">> WARNING: another backup process is still running (skipping)"
+    echo ">> WARNING: another backup task is still running (skipping)"
   else
     echo ">> ERROR: backup failed"
   fi

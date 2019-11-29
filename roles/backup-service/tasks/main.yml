@@ -1,15 +1,23 @@
-- name: 'install required backup software'
-  apt: name='{{item}}' state=latest
+- name: 'install borg'
+  get_url:
+    url: https://github.com/borgbackup/borg/releases/download/1.1.10/borg-linux64
+    dest: /usr/local/bin/borg
+    checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2d6a597c75a67a876ef9af
+    mode: '0755'
+
+- name: 'install parallel and apache'
+  apt:
+    name: '{{item}}'
+    state: latest
   with_items:
-    - rdiff-backup
-    - duplicity
     - parallel
     - apache2
 
-- name: 'install boto for duplicity and pyyaml for status script'
-  pip: name='{{item}}' state=latest
+- name: 'install pyyaml'
+  pip:
+    name: '{{item}}'
+    state: latest
   with_items:
-    - boto
     - pyyaml
 
 - name: 'create directories'
@@ -22,10 +30,10 @@
   with_items:
     - /backup
     - /backup/scripts
-    - /backup/config
     - /backup/repos
     - /backup/locks
     - /backup/logs
+    - /backup/socks
     - /backup/monitoring
     - /backup/monitoring/webroot
 
@@ -39,37 +47,20 @@
   with_items:
     - backup.sh
     - backup-object.sh
-    - backup-object-main.sh
-    - backup-object-rdiff-backup.sh
-    - backup-object-duplicity.sh
+    - backup-object-task.sh
     - backup-status.py
 
-- name: 'write configuration : object list'
-  copy:
-    content: "{{ groups['operations'] | map('extract', hostvars, ['ansible_host']) | join('\n') }}"
-    dest: /backup/config/objects.list
-    owner: root
-    group: root
-    mode: 0644
+- name: 'prepare configuration'
+  set_fact:
+    backup_config:
+      objects: "{{ groups['operations'] | map('extract', hostvars) | list | json_query('[].{ key: inventory_hostname, value: ansible_host }') | items2dict }}"
+      retention: "{{ backup_retention }}"
+      aws: "{{ backup_aws }}"
 
-- name: 'write configuration : shell variables'
+- name: 'write configuration'
   copy:
-    content: |
-      CONFIG_AWS_KEY_ID="{{ backup_aws_key_id }}"
-      CONFIG_AWS_KEY_SECRET="{{ backup_aws_key_secret }}"
-      CONFIG_AWS_S3_URL="{{ backup_aws_s3_url }}"
-      CONFIG_REMOTE_FULL_IF_OLDER_THAN="{{ backup_remote_full_if_older_than }}"
-      CONFIG_REMOTE_REMOVE_OLDER_THAN="{{ backup_remote_remove_older_than }}"
-      CONFIG_LOCAL_REMOVE_OLDER_THAN="{{ backup_local_remove_older_than }}"
-    dest: /backup/config/vars.sh
-    owner: root
-    group: root
-    mode: 0644
-
-- name: 'write configuration : yaml variables'
-  copy:
-    content: "last_not_older_than: {{ backup_last_not_older_than }}"
-    dest: /backup/config/vars.yaml
+    content: "{{ backup_config | to_nice_json }}"
+    dest: /backup/config.json
     owner: root
     group: root
     mode: 0644
@@ -85,18 +76,18 @@
     dest: '{{ inventory_dir }}/keys/backup_{{ inventory_hostname }}.pub'
     flat: yes
 
-- name: 'setup cronjob : backup service'
+- name: 'setup cronjob'
   cron:
     name: backup-service
     cron_file: backup-service
-    minute: 0
+    minute: '0'
     user: root
     job: '/backup/scripts/backup.sh'
 
 # configure firewall
 - name: 'allow http traffic for monitoring'
   copy:
-    src: 'packetfilter-config-backupservice.sh'
+    src: 'packetfilter-config.sh'
     dest: '/etc/packetfilter/10-backupservice.sh'
     owner: root
     group: root
@@ -143,7 +134,7 @@
     mode: 0644
   notify: restart apache
 
-- name: 'vhost configuration : enable'
+- name: 'vhost configuration : symlink'
   file:
     src: /backup/monitoring/vhost.conf
     dest: /etc/apache2/sites-enabled/000-monitoring.conf

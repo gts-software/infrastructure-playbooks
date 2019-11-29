@@ -67,13 +67,11 @@ def status():
             }
             ok = False
             if details[object]["exitcode"] == 2:
-                summary[object]["message"] = "backup failed (rdiff-backup failed)"
+                summary[object]["message"] = "backup failed ('borg create' failed)"
             if details[object]["exitcode"] == 3:
-                summary[object]["message"] = "backup failed (duplicity failed)"
+                summary[object]["message"] = "backup failed ('borg prune' failed)"
             if details[object]["exitcode"] == 4:
-                summary[object]["message"] = "backup failed (cleanup rdiff-backup failed)"
-            if details[object]["exitcode"] == 5:
-                summary[object]["message"] = "backup failed (cleanup duplicity failed)"
+                summary[object]["message"] = "backup failed ('aws s3 sync' failed)"
             if details[object]["exitcode"] == 99:
                 summary[object]["message"] = "backup skipped (blocked by parallel running backup process)"
             continue
@@ -104,5 +102,5 @@ def status():
 
 if __name__ == "__main__":
     current = status()
-    print json.dumps(current, sort_keys=True, indent=2, default=str)
+    print(json.dumps(current, sort_keys=True, indent=2, default=str))
     sys.exit(0 if current["ok"] else 1)

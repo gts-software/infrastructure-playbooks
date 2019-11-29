@@ -1,6 +1,6 @@
 # Infrastructure Playbooks
 
-This project provides a set of Ansible playbooks for a Docker-centric world. Use them to set up single servers, entire clusters, and projects on top of it. It supports logging and backup out of the box.
+This project provides a set of Ansible playbooks for a Docker-centric world. Use them to set up single servers and projects on top of it. It supports logging and backup out of the box.
 
 Please have a look at the following projects too:
 - [infrastructure-playbooks/templates/inventory](https://github.com/core-process/infrastructure-playbooks/tree/master/templates/inventory)
@@ -72,10 +72,6 @@ Configure the `deploy-server.yml` playbook with the following variables:
 
 Please have a look at the following projects for further information and instructions:
 - [logspout-loggly](https://github.com/iamatypeofwalrus/logspout-loggly): This is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to Loggly.
-
-## Manage a Cluster
-
-Coming soon...
 
 ## Manage a Project
 
