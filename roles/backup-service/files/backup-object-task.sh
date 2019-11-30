@@ -30,10 +30,7 @@ if ! \
     -o PasswordAuthentication=no \
     -R "/root/backup-server.sock:/backup/socks/$BACKUP_OBJECT.sock" \
     "root@$(jq -r --arg object "$BACKUP_OBJECT" '.objects[$object]' /backup/config.json)" \
-    backup-on-pull.sh \
-      create \
-      "ssh://remote/backup/repos/$BACKUP_OBJECT::$(date +%Y-%m-%dT%H.%M)" \
-      /mnt/root-snapshot/data ;
+    backup-on-pull.sh ;
 then
   kill -INT $SOCAT_PID
 
