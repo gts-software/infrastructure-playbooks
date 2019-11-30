@@ -7,12 +7,22 @@ BACKUP_OBJECT="$1"
 # initialization
 echo ">> INFO: running backup for $BACKUP_OBJECT"
 
+rm -f /backup/socks/$BACKUP_OBJECT.sock
+
 if ! mkdir -p "/backup/repos/$BACKUP_OBJECT";
 then
+  echo ">> ERROR: 'mkdir' failed for $BACKUP_OBJECT"
   exit 1
 fi
 
-rm -f /backup/socks/$BACKUP_OBJECT.sock
+if [ -z "$(find "/backup/repos/$BACKUP_OBJECT" -mindepth 1 -print -quit 2>/dev/null)" ];
+then
+  if ! borg init --encryption=none "/backup/repos/$BACKUP_OBJECT" ;
+  then
+    echo ">> ERROR: 'borg init' failed for $BACKUP_OBJECT"
+    exit 1
+  fi
+fi
 
 #### backup phase
 
