@@ -60,7 +60,7 @@ if ! \
     aws \
       s3 sync \
       "/backup/repos/$BACKUP_OBJECT" \
-      "s3://$(jq -r '.upstream.aws.bucket' /backup/config.json)/$BACKUP_OBJECT" \
+      "$(jq -r '.upstream.aws.bucket_url' /backup/config.json)/$BACKUP_OBJECT" \
       --size-only --delete ;
 then
   echo ">> ERROR: 'aws s3 sync' failed for $BACKUP_OBJECT"
