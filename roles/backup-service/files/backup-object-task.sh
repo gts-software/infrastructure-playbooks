@@ -55,7 +55,7 @@ echo ">> INFO: running 'borg prune' for $BACKUP_OBJECT"
 if ! \
   borg \
     prune --list \
-    $(jq -r '.retention.keep | keys[] as $p | "--keep-$p=.[$p]"' /backup/config.json) \
+    $(jq -r '.retention.keep | to_entries[] | "--keep-" + .key + "=" + .value' /backup/config.json) \
     /backup/repos/$BACKUP_OBJECT ;
 then
   echo ">> ERROR: 'borg prune' failed for $BACKUP_OBJECT"
