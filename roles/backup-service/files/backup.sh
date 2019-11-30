@@ -5,7 +5,12 @@ set -e
 export BACKUP_TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 JOBS_FAILED_COUNT="0"
-parallel --will-cite --keep-order --jobs 3 --joblog /backup/logs/joblog-$BACKUP_TIMESTAMP.log /backup/scripts/backup-object.sh {} '&>' /backup/logs/{}-$BACKUP_TIMESTAMP.log < /backup/config/objects.list || JOBS_FAILED_COUNT="$?"
+jq -r '.objects | keys[]' /backup/config.json | \
+  parallel \
+    --will-cite --keep-order --jobs 3 \
+    --joblog /backup/logs/joblog-$BACKUP_TIMESTAMP.log \
+    /backup/scripts/backup-object.sh {} '&>' /backup/logs/{}-$BACKUP_TIMESTAMP.log \
+      || JOBS_FAILED_COUNT="$?"
 
 # validate result
 if [ "$JOBS_FAILED_COUNT" != "0" ];

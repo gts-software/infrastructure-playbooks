@@ -5,20 +5,16 @@
     checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2d6a597c75a67a876ef9af
     mode: '0755'
 
-- name: 'install parallel and apache'
+- name: 'install packages'
   apt:
     name: '{{item}}'
     state: latest
   with_items:
     - parallel
     - apache2
-
-- name: 'install pyyaml'
-  pip:
-    name: '{{item}}'
-    state: latest
-  with_items:
-    - pyyaml
+    - socat
+    - jq
+    - awscli
 
 - name: 'create directories'
   file:
@@ -54,8 +50,20 @@
   set_fact:
     backup_config:
       objects: "{{ groups['operations'] | map('extract', hostvars) | list | json_query('[].{ key: inventory_hostname, value: ansible_host }') | items2dict }}"
-      retention: "{{ backup_retention }}"
-      aws: "{{ backup_aws }}"
+      retention:
+        keep:
+          within: "{{ backup_retention_keep_within | default('1d') }}"
+          daily: "{{ backup_retention_keep_daily | default(7) }}"
+          weekly: "{{ backup_retention_keep_weekly | default(4) }}"
+          monthly: "{{ backup_retention_keep_monthly | default(12) }}"
+          yearly: "{{ backup_retention_keep_yearly | default(2) }}"
+      upstream:
+        aws:
+          bucket: "{{ backup_upstream_aws_bucket }}"
+          access_key_id: "{{ backup_upstream_aws_access_key_id }}"
+          secret_access_key: "{{ backup_upstream_aws_secret_access_key }}"
+      monitoring:
+        max_age_hours: "{{ backup_monitoring_max_age_hours | default(12) }}"
 
 - name: 'write configuration'
   copy:
@@ -94,7 +102,8 @@
     mode: 0755
   notify: restart packetfilter
 
-- meta: flush_handlers
+- name: run notified handler
+  meta: flush_handlers
 
 # configure apache
 - name: 'detect enabled apache modules'
@@ -116,14 +125,12 @@
 - name: 'vhost configuration'
   copy:
     content: |
-      # enable cgi for python scripts
       <Directory "/backup/monitoring/webroot">
         AddHandler cgi-script .py
         DirectoryIndex index.py
         Options ExecCGI
         Require all granted
       </Directory>
-      # serve monitoring script
       <VirtualHost *:80>
         ServerAdmin {{ base_devops_email }}
         DocumentRoot /backup/monitoring/webroot
@@ -166,4 +173,5 @@
   changed_when: "command_ssh_keyscan.stderr|length > 0"
   with_items: "{{ groups['operations'] | map('extract', hostvars, ['ansible_host']) | list }}"
 
-- meta: flush_handlers
+- name: run notified handler
+  meta: flush_handlers
