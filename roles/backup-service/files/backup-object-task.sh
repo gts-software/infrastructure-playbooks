@@ -27,7 +27,7 @@ sleep 1s
 
 if ! \
   ssh \
-    -R "/backup/socks/$BACKUP_OBJECT.sock:/root/backup-server.sock" \
+    -R "/root/backup-server.sock:/backup/socks/$BACKUP_OBJECT.sock" \
     "root@$(jq -r --arg object "$BACKUP_OBJECT" '.objects[$object]' /backup/config.json)" \
     backup-on-pull.sh \
       create \
