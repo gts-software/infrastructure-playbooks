@@ -6,7 +6,7 @@ set -e
 trap "rm -f /root/backup-server.sock" EXIT
 
 #  run backup within snapshot over provided socket
-BORG_RSH="'bash -c \"exec socat STDIO UNIX-CONNECT:/root/backup-server.sock\"'"
+export BORG_RSH="bash -c \"exec socat STDIO UNIX-CONNECT:/root/backup-server.sock\""
 run-with-snapshot.sh \
     borg create --progress \
         "ssh://remote/backup/repos/$(hostname)::$(date +%Y-%m-%dT%H.%M)" \
