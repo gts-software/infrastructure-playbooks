@@ -82,7 +82,7 @@ def status():
             ok = False
             continue
         # check if last backup is too old
-        if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -config['monitoring']['max_age_hours']):
+        if details[object]["timestamp"] < datetime.utcnow() + timedelta(hours = -int(config['monitoring']['max_age_hours'])):
             summary[object] = {
                 "ok": False,
                 "message": "backup is too old",

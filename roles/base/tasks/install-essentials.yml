@@ -19,6 +19,7 @@
     - traceroute
     - python-pip
     - python-virtualenv
+    - python3-pip
     - exim4
     - byobu
     - reboot-notifier
