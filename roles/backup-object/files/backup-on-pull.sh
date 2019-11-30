@@ -6,6 +6,7 @@ set -e
 trap "rm -f /root/backup-server.sock" EXIT
 
 #  run backup within snapshot over provided socket
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 export BORG_RSH="bash -c \"exec socat STDIO UNIX-CONNECT:/root/backup-server.sock\""
 run-with-snapshot.sh \
     borg create --progress \
