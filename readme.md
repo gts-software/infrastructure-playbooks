@@ -49,8 +49,7 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | ansible_host | The IP or DNS of the host to connect to  | `alpha.example.com` |
 | ansible_user | The default ssh user name to use | `root` |
 | **Base** | | |
-| base_name_host | Hostname to be applied | `alpha` |
-| base_name_domain | Domainname to be applied | `example.com` |
+| base_domain | Domainname to be applied | `example.com` |
 | base_devops_email | Email address of the DevOps team | `devops@example.com` |
 | **Remote Access** | | |
 | base_authorized_keys | Authorized user keys for root access | `- ssh-rsa AAAAB3N...` |
@@ -63,12 +62,15 @@ Configure the `deploy-server.yml` playbook with the following variables:
 | **Logging** | | |
 | logging_token | Loggly customer token  | `a6b1ba3...` |
 | **Backup** | | |
-| backup_remote_full_if_older_than | Perform a full backup if the latest full backup is older than the given time | `1M` |
-| backup_remote_remove_older_than | Delete all backups older than the given time on Amazon AWS | `1Y` |
-| backup_local_remove_older_than | Delete all backups older than the given time on local disk | `3M` |
-| backup_aws_s3_url | Duplicity target url | `s3://s3...amazonaws.com/...` |
-| backup_aws_key_id | Amazon AWS access key id | `7M1VGFL6...` |
-| backup_aws_key_secret | Amazon AWS access key secret | `HvbMb9v8dW...` |
+| backup_retention_keep_within | keep all archives within this time interval | `1d` |
+| backup_retention_keep_daily | number of daily archives to keep | 7 |
+| backup_retention_keep_weekly | number of weekly archives to keep | 4 |
+| backup_retention_keep_monthly | number of monthly archives to keep | 12 |
+| backup_retention_keep_yearly | number of yearly archives to keep | 2 |
+| backup_monitoring_max_age_hours | maximum age of last completed backup before monitoring fails | 6 |
+| backup_upstream_aws_bucket_url | S3 bucket url | `s3://s3...amazonaws.com/...` |
+| backup_upstream_aws_access_key_id | AWS access key id | `7M1VGFL6...` |
+| backup_upstream_aws_secret_access_key | AWS access key secret | `HvbMb9v8dW...` |
 
 Please have a look at the following projects for further information and instructions:
 - [logspout-loggly](https://github.com/iamatypeofwalrus/logspout-loggly): This is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to Loggly.

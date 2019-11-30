@@ -6,7 +6,7 @@
     line: "{{ item.var }}='{{ item.val }}'"
   with_items:
     - { var: dc_eximconfig_configtype, val: 'internet' }
-    - { var: dc_other_hostnames, val: '{{ base_name_host }}' }
+    - { var: dc_other_hostnames, val: '{{ inventory_hostname }}' }
     - { var: dc_local_interfaces, val: '127.0.0.1 ; ::1' }
     - { var: dc_readhost, val: '' }
     - { var: dc_relay_domains, val: '' }
@@ -23,7 +23,7 @@
 - name: 'configure exim : set mailname'
   copy:
     dest: '/etc/mailname'
-    content: '{{ base_name_host }}'
+    content: '{{ inventory_hostname }}'
     force: true
   notify: update exim configuration
 

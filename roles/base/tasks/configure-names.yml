@@ -2,9 +2,9 @@
   blockinfile:
     dest: /etc/dhcp/dhclient.conf
     block: |
-      supersede host-name "{{ base_name_host }}";
-      supersede domain-name "{{ base_name_domain }}";
-      supersede domain-search "{{ base_name_domain }}";
+      supersede host-name "{{ inventory_hostname }}";
+      supersede domain-name "{{ base_domain }}";
+      supersede domain-search "{{ base_domain }}";
       supersede domain-name-servers 8.8.8.8;
   notify: reboot system
 
@@ -12,10 +12,10 @@
   lineinfile:
     dest: /etc/hosts
     regexp: '^127\.0\.1\.1'
-    line: '127.0.1.1 {{ base_name_host }}.{{ base_name_domain }} {{ base_name_host }}'
+    line: '127.0.1.1 {{ inventory_hostname }}.{{ base_domain }} {{ inventory_hostname }}'
   notify: reboot system
 
 - name: 'configure names : configure host-name'
   hostname:
-    name: '{{ base_name_host }}'
+    name: '{{ inventory_hostname }}'
   notify: reboot system

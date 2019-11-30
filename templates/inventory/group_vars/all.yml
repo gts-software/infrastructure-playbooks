@@ -1,5 +1,5 @@
 # base
-base_name_domain: example.com
+base_domain: example.com
 base_devops_email: devops@example.com
 base_authorized_keys:
   - ssh-rsa AAA...jXBlJgNch2yw== admin@example.local

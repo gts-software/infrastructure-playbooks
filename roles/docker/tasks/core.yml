@@ -51,7 +51,7 @@
     state: started
     env:
       LOGGLY_TOKEN: '{{ logging_token }}'
-      LOGGLY_TAGS: '{{ base_name_host }}.{{ base_name_domain }}'
+      LOGGLY_TAGS: '{{ inventory_hostname }}.{{ base_domain }}'
       FILTER_NAME: '*'
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock:ro'

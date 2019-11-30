@@ -57,13 +57,13 @@
           weekly: "{{ backup_retention_keep_weekly | default(4) }}"
           monthly: "{{ backup_retention_keep_monthly | default(12) }}"
           yearly: "{{ backup_retention_keep_yearly | default(2) }}"
+      monitoring:
+        max_age_hours: "{{ backup_monitoring_max_age_hours | default(6) }}"
       upstream:
         aws:
-          bucket: "{{ backup_upstream_aws_bucket }}"
+          bucket_url: "{{ backup_upstream_aws_bucket_url }}"
           access_key_id: "{{ backup_upstream_aws_access_key_id }}"
           secret_access_key: "{{ backup_upstream_aws_secret_access_key }}"
-      monitoring:
-        max_age_hours: "{{ backup_monitoring_max_age_hours | default(12) }}"
 
 - name: 'write configuration'
   copy:

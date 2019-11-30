@@ -1,6 +1,3 @@
 # ansible
 ansible_host: alpha.example.com
 ansible_user: root
-
-# base
-base_name_host: alpha
