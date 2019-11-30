@@ -21,6 +21,6 @@
     user: root
     path: /root/.ssh/authorized_keys.backup
     key: "{{ backup_authorized_keys | join('\n') }}"
-    key_options: 'command="backup-on-pull.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict'
+    key_options: 'command="backup-on-pull.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict,port-forwarding'
     exclusive: true
     manage_dir: false

@@ -27,6 +27,7 @@ sleep 1s
 
 if ! \
   ssh \
+    -o PasswordAuthentication=no \
     -R "/root/backup-server.sock:/backup/socks/$BACKUP_OBJECT.sock" \
     "root@$(jq -r --arg object "$BACKUP_OBJECT" '.objects[$object]' /backup/config.json)" \
     backup-on-pull.sh \
