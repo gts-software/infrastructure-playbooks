@@ -1,7 +1,10 @@
 # backup
-backup_remote_full_if_older_than: '1M' # 1 month (used with duplicity)
-backup_remote_remove_older_than: '1Y' # 1 year (used with duplicity)
-backup_local_remove_older_than: '1Y' # 1 year (used with rdiff-backup)
-backup_aws_s3_url: 's3://s3-eu-central-1.amazonaws.com/some-bucket'
-backup_aws_key_id: '7M1VGFL6T10A8YURMQAH'
-backup_aws_key_secret: 'HvbMb9v8dWXKus0GZQTVT4kheBgSz7er0fde5svx'
+backup_retention_keep_within: '1d'
+backup_retention_keep_daily: 7
+backup_retention_keep_weekly: 4
+backup_retention_keep_monthly: 6
+backup_retention_keep_yearly: 0
+backup_monitoring_max_age_hours: 9
+backup_upstream_aws_bucket_url: 's3://s3-eu-central-1.amazonaws.com/some-bucket'
+backup_upstream_aws_access_key_id: '7M1VGFL6T10A8YURMQAH'
+backup_upstream_aws_secret_access_key: 'HvbMb9v8dWXKus0GZQTVT4kheBgSz7er0fde5svx'

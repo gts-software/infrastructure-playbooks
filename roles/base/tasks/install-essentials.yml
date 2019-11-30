@@ -21,7 +21,6 @@
     - python-virtualenv
     - exim4
     - byobu
-    - rdiff-backup
     - reboot-notifier
     - needrestart
     - bridge-utils
