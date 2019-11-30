@@ -23,6 +23,8 @@ socat "UNIX-LISTEN:/backup/socks/$BACKUP_OBJECT.sock,fork" \
     "EXEC:borg serve --append-only --restrict-to-path /backup/repos/$BACKUP_OBJECT" &
 SOCAT_PID=$!
 
+sleep 1s
+
 if ! \
   ssh \
     -R "/backup/socks/$BACKUP_OBJECT.sock:/root/backup-server.sock" \
