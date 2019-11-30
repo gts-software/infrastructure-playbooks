@@ -32,6 +32,8 @@ if ! \
       "ssh://remote/backup/repos/$BACKUP_OBJECT::$(date +%Y-%m-%dT%H.%M)" \
       /mnt/root-snapshot/data ;
 then
+  kill -INT $SOCAT_PID
+
   echo ">> ERROR: 'borg create' failed for $BACKUP_OBJECT"
   exit 2
 fi
