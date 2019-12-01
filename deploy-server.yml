@@ -17,12 +17,12 @@
     - docker
     - deployment-target
 
-- name: 'deploy operations : prune docker'
+- name: prune operations
   hosts: operations
   roles:
     - prune-docker
 
-- name: 'deploy all : cleanup'
+- name: cleanup all
   hosts: all
   roles:
     - cleanup-reboot
