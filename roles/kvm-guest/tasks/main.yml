@@ -1,3 +1,8 @@
+- name: 'install guest utilities'
+  apt:
+    name: 'qemu-guest-agent'
+    state: latest
+
 - name: 'enable noop scheduler'
   lineinfile:
     dest: /etc/default/grub
@@ -8,13 +13,14 @@
 - name: 'adjust vm.dirty_ratio = 10'
   sysctl:
     name: vm.dirty_ratio
-    value: 10
+    value: '10'
     sysctl_file: /etc/sysctl.d/local.conf
 
 - name: 'adjust vm.dirty_background_ratio = 5'
   sysctl:
     name: vm.dirty_background_ratio
-    value: 5
+    value: '5'
     sysctl_file: /etc/sysctl.d/local.conf
 
-- meta: flush_handlers
+- name: run notified handler
+  meta: flush_handlers
