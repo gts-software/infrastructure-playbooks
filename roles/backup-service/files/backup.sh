@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e
 
+# prepare for cron environment
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
 # run up to 3 backups in parallel and collect number of backup jobs failed
-export BACKUP_TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+BACKUP_TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 JOBS_FAILED_COUNT="0"
 jq -r '.objects | keys[]' /backup/config.json | \
