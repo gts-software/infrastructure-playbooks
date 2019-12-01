@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup Break Locks on Boot
+
+[Service]
+Type=oneshot
+ExecStart=/backup/scripts/backup-break-locks.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=ssh.service cron.service

@@ -1,0 +1,10 @@
+[Unit]
+Description=Discard Snapshot on Boot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/discard-snapshot.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=ssh.service cron.service

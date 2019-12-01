@@ -52,6 +52,7 @@
     - backup-object.sh
     - backup-object-task.sh
     - backup-status.py
+    - backup-break-locks.sh
 
 - name: 'prepare configuration'
   set_fact:
@@ -98,6 +99,20 @@
     minute: '0'
     user: root
     job: '/backup/scripts/backup.sh'
+
+- name: 'install backup-break-locks-on-boot service'
+  copy:
+    src: backup-break-locks-on-boot.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'enable backup-break-locks-on-boot service'
+  systemd:
+    name: backup-break-locks-on-boot.service
+    enabled: yes
+    daemon_reload: yes
 
 # configure firewall
 - name: 'allow http traffic for monitoring'

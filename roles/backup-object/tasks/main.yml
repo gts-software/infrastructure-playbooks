@@ -21,6 +21,7 @@
     mode: 0755
   with_items:
     - run-with-snapshot.sh
+    - discard-snapshot.sh
     - backup-on-pull.sh
 
 - name: 'configure authorized keys'
@@ -31,3 +32,17 @@
     key_options: 'command="backup-on-pull.sh",from="{{ groups[''backup''] | default([]) | map(''extract'', hostvars, [''ansible_host'']) | join('','') }}",restrict,port-forwarding'
     exclusive: true
     manage_dir: false
+
+- name: 'install discard-snapshot-on-boot service'
+  copy:
+    src: discard-snapshot-on-boot.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'enable discard-snapshot-on-boot service'
+  systemd:
+    name: discard-snapshot-on-boot.service
+    enabled: yes
+    daemon_reload: yes
