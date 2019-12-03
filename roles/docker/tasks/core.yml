@@ -105,6 +105,9 @@
   notify: restart apache
   when: gate_use_apache_wrapper | default(false) | bool
 
+- name: run notified handler
+  meta: flush_handlers
+
 - name: 'gate : network'
   docker_network:
     name: core_gate
