@@ -4,6 +4,30 @@
     state: latest
   when: gate_use_apache_wrapper | default(false) | bool
 
+- name: 'enable apache proxy module'
+  apache2_module:
+    name: proxy
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache proxy_http module'
+  apache2_module:
+    name: proxy_http
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache ssl module'
+  apache2_module:
+    name: ssl
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache headers module'
+  apache2_module:
+    name: headers
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
 - name: 'apache port configuration'
   copy:
     content: |
@@ -39,6 +63,7 @@
         SSLCertificateFile /etc/apache2/tls/{{ gate_apache_hostname }}-cert.pem
         SSLCertificateKeyFile /etc/apache2/tls/{{ gate_apache_hostname }}-key.pem
         ServerAdmin {{ base_devops_email }}
+        Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
         <If "%{HTTP_HOST} != '{{ gate_apache_hostname }}'">
           Redirect "/" "https://{{ gate_apache_hostname }}/"
         </If>
@@ -97,24 +122,6 @@
     owner: root
     group: root
     mode: 0600
-  notify: restart apache
-  when: gate_use_apache_wrapper | default(false) | bool
-
-- name: 'enable apache proxy module'
-  apache2_module:
-    name: proxy
-  notify: restart apache
-  when: gate_use_apache_wrapper | default(false) | bool
-
-- name: 'enable apache proxy_http module'
-  apache2_module:
-    name: proxy_http
-  notify: restart apache
-  when: gate_use_apache_wrapper | default(false) | bool
-
-- name: 'enable apache ssl module'
-  apache2_module:
-    name: ssl
   notify: restart apache
   when: gate_use_apache_wrapper | default(false) | bool
 
