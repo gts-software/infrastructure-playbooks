@@ -1,3 +1,110 @@
+- name: 'install apache'
+  apt:
+    name: apache2
+    state: latest
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache proxy module'
+  apache2_module:
+    name: proxy
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache proxy_http module'
+  apache2_module:
+    name: proxy_http
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'enable apache ssl module'
+  apache2_module:
+    name: ssl
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache port configuration'
+  copy:
+    content: |
+      Listen {{ ansible_host }}:80
+      Listen {{ ansible_host }}:443
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache host configuration'
+  copy:
+    content: |
+      <VirtualHost {{ ansible_host }}:80>
+        ServerAdmin {{ base_devops_email }}
+        <If "%{HTTP_HOST} != '{{ gate_apache_hostname }}'">
+          Redirect "/" "http://{{ gate_apache_hostname }}/"
+        </If>
+        <Else>
+          {% if gate_apache_enforce_https %}
+          Redirect "/" "https://{{ gate_apache_hostname }}/"
+          {% else %}
+          ProxyPass / http://127.0.0.1:80/
+          ProxyPassReverse / http://127.0.0.1:80/
+          ProxyPreserveHost On
+          {% endif %}
+        </Else>
+      </VirtualHost>
+      {% if gate_apache_tls_enabled %}
+      <VirtualHost {{ ansible_host }}:443>
+        SSLEngine on
+        SSLCertificateFile /etc/apache2/tls/{{ gate_apache_hostname }}-cert.pem
+        SSLCertificateKeyFile /etc/apache2/tls/{{ gate_apache_hostname }}-key.pem
+        ServerAdmin {{ base_devops_email }}
+        <If "%{HTTP_HOST} != '{{ gate_apache_hostname }}'">
+          Redirect "/" "https://{{ gate_apache_hostname }}/"
+        </If>
+        <Else>
+          ProxyPass / http://127.0.0.1:80/
+          ProxyPassReverse / http://127.0.0.1:80/
+          ProxyPreserveHost On
+        </Else>
+      </VirtualHost>
+      {% endif %}
+    dest: /etc/apache2/sites-available/000-default.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache tls directory'
+  file:
+    path: /etc/apache2/tls
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache tls cert'
+  copy:
+    content: '{{ gate_apache_tls_cert }}'
+    dest: '/etc/apache2/tls/{{ gate_apache_hostname }}-cert.pem'
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache tls key'
+  copy:
+    content: '{{ gate_apache_tls_key }}'
+    dest: '/etc/apache2/tls/{{ gate_apache_hostname }}-key.pem'
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
 - name: 'gate : network'
   docker_network:
     name: core_gate
@@ -10,7 +117,7 @@
     restart_policy: 'unless-stopped'
     state: started
     command: >
-      {% if gate_disable_tls | default(false) %}
+      {% if gate_use_apache_wrapper | default(false) %}
       --entryPoints='Name:http Address::80'
       --defaultEntryPoints=http
       {% else %}
@@ -34,8 +141,8 @@
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
       - '/data/core_gate/certs/:/certs'
     ports:
-      - '80:80'
-      - '443:443'
+      - '{% if gate_use_apache_wrapper | default(false) %}127.0.0.1:{% endif %}80:80'
+      - '{% if gate_use_apache_wrapper | default(false) %}127.0.0.1:{% endif %}443:443'
       - '127.0.0.1:8080:8080'
     networks:
       - name: bridge
