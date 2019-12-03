@@ -54,6 +54,22 @@
   notify: restart apache
   when: gate_use_apache_wrapper | default(false) | bool
 
+- name: 'apache enable server ciphers'
+  replace:
+    dest: /etc/apache2/mods-available/ssl.conf
+    regexp: '^(\s*)\#?(\s*)SSLHonorCipherOrder(\s+).*$'
+    replace: '\1SSLHonorCipherOrder on'
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
+- name: 'apache set server ciphers'
+  replace:
+    dest: /etc/apache2/mods-available/ssl.conf
+    regexp: '^(\s*)\#?(\s*)SSLCipherSuite(\s+).*$'
+    replace: '\1SSLCipherSuite EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA:EECDH:EDH+AESGCM:EDH:+3DES:ECDH+AESGCM:ECDH+AES:ECDH:AES:HIGH:MEDIUM:!RC4:!CAMELLIA:!SEED:!aNULL:!MD5:!eNULL:!LOW:!EXP:!DSS:!PSK:!SRP'
+  notify: restart apache
+  when: gate_use_apache_wrapper | default(false) | bool
+
 - name: 'apache tls directory'
   file:
     path: /etc/apache2/tls
