@@ -45,7 +45,7 @@
     content: |
       <VirtualHost {{ ansible_host }}:80>
         ServerAdmin {{ base_devops_email }}
-        <If "%{HTTP_HOST} != '{{ gate_apache_hostname }}'">
+        <If "-n req('Host') && req('Host') != '{{ gate_apache_hostname }}'">
           Redirect "/" "http://{{ gate_apache_hostname }}/"
         </If>
         {% if gate_apache_enforce_https %}
@@ -64,7 +64,7 @@
         SSLCertificateKeyFile /etc/apache2/tls/{{ gate_apache_hostname }}-key.pem
         ServerAdmin {{ base_devops_email }}
         Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-        <If "%{HTTP_HOST} != '{{ gate_apache_hostname }}'">
+        <If "-n req('Host') && req('Host') != '{{ gate_apache_hostname }}'">
           Redirect "/" "https://{{ gate_apache_hostname }}/"
         </If>
         ProxyPass / http://127.0.0.1:80/
