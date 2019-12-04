@@ -72,6 +72,9 @@
         ProxyPreserveHost On
       </VirtualHost>
       {% endif %}
+      <Proxy "http://127.0.0.1:80/">
+        RequestHeader set Host "{{ gate_apache_hostname }}"
+      </Proxy>
     dest: /etc/apache2/sites-available/000-default.conf
     owner: root
     group: root
